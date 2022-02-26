@@ -23,6 +23,7 @@ public class UserEntity {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 25)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
+    //TODO
     private String username;
     private String password;
     private String email;
