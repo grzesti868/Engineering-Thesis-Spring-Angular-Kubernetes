@@ -1,6 +1,7 @@
 package com.App.Commerce.Models.User;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +13,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping("api/v1/users")
 public class UsersController {
-/*
+
     private final UserService userService;
 
+    @Autowired
     public UsersController(final UserService userService) {
         this.userService = userService;
     }
 
-
+/*
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserRestModel>> listAllUsers() {
