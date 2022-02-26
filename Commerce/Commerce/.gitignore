@@ -31,9 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
-<<<<<<< HEAD
 
 ### application.properties
 ./src/main/resources/application.properties
-=======
->>>>>>> parent of d5bae3a... "implemented database postgresql connection -exclude project props"
