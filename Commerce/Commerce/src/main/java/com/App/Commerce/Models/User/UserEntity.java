@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -23,18 +26,32 @@ public class UserEntity {
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 25)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
     private Long id;
-    //TODO
+
+    @Column(nullable = false, name = "username")
     private String username;
+
+    @Column(nullable = false, name = "password")
     private String password;
+
+    @Column(nullable = false, name = "email")
     private String email;
-    private LocalDate birthDate;
+
+    @Column(nullable = false, name = "timestamp", updatable = false)
+    @CreationTimestamp
+    private Date timestamp;
+
+    @Column(name = "updated_on")
+    @UpdateTimestamp
+    private Date updatedOn;
+
+    @Column(nullable = false, name = "status")
     private StatusEnum status;
 
-    public UserEntity(String username, String password, String email, LocalDate birthDate, StatusEnum status) {
+    public UserEntity(String username, String password, String email, StatusEnum status) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.birthDate = birthDate;
         this.status = status;
     }
+
 }

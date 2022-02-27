@@ -3,6 +3,10 @@ package com.App.Commerce;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//TODO: dodac public getAge do person Period.between(birth, now).getYears();
+//TODO: w userze email nie moze juz istnieć (dodac w service wymóg)
+//TODO: czy dodac RESTMODEL czy olac? (raczej olac)
+
 @SpringBootApplication
 public class CommerceApplication {
 
