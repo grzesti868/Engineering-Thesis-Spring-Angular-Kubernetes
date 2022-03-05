@@ -10,5 +10,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean  existsByUsername(String username);
     void deleteByUsername(String username);
     //@Query("SELECT s FROM users s WHERE s.email = ?1")
-    boolean existByEmail(String username);
+    //tODO: boolean existByEmail(String Email);
 }

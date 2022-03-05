@@ -2,10 +2,8 @@ package com.App.Commerce.Models.User;
 
 
 import com.App.Commerce.Enums.StatusEnum;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.App.Commerce.Models.Person.PersonEntity;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -38,14 +36,23 @@ public class UserEntity {
 
     @Column(nullable = false, name = "timestamp", updatable = false)
     @CreationTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
     private Date timestamp;
 
     @Column(name = "updated_on")
     @UpdateTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
     private Date updatedOn;
 
     @Column(nullable = false, name = "status")
     private StatusEnum status;
+
+    @OneToOne(targetEntity = PersonEntity.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "FkPerson", referencedColumnName = "id")
+    private PersonEntity personEntity;
+
+
+
 
     public UserEntity(String username, String password, String email, StatusEnum status) {
         this.username = username;

@@ -44,14 +44,18 @@ public class UsersController {
 
     @PutMapping("{username}")
     @PreAuthorize("hasAuthority('address:write') or #username == authentication.name")
-    public ResponseEntity<UserRestModel> updateUserByUsername(@PathVariable final String username,@RequestBody final UserRestModel user){
+    public ResponseEntity<UserRestModel> updateUserByUsername(
+            @PathVariable final String username,
+            @RequestBody final UserRestModel user) {
         return ResponseEntity.ok(userService.update(username,user));
     }
 
-    @DeleteMapping("{username}")
+    @DeleteMapping(path = "{username}")
     @PreAuthorize("hasAuthority('address:write') or #username == authentication.name")
-    public ResponseEntity<String> deleteUserByUsername(@PathVariable final String username){
+    public ResponseEntity<String> deleteUserByUsername(@PathVariable("username") final String username){
         userService.deleteByUsername(username);
         return ResponseEntity.ok("User has been deleted.");
-    }*/
+    }
+
+ */
 }
