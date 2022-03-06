@@ -1,24 +1,18 @@
-package com.App.Commerce.Models.User;
+package com.App.Commerce.Models.AppUser;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("api/v1/users")
-public class UsersController {
+public class AppUsersController {
 
-    private final UserService userService;
+    private final AppUserService appUserService;
 
     @Autowired
-    public UsersController(final UserService userService) {
-        this.userService = userService;
+    public AppUsersController(final AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
 /*

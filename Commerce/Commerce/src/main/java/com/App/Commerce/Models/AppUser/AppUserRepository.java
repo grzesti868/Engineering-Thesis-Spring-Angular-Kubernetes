@@ -1,14 +1,14 @@
-package com.App.Commerce.Models.User;
+package com.App.Commerce.Models.AppUser;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface AppUserRepository extends JpaRepository<AppUserEntity, Long> {
 
-    UserEntity findByUsername(String username);
+    AppUserEntity findByUsername(String username);
     boolean  existsByUsername(String username);
     void deleteByUsername(String username);
     //@Query("SELECT s FROM users s WHERE s.email = ?1")
-    //tODO: boolean existByEmail(String Email);
+    boolean existsByEmail(String email);
 }

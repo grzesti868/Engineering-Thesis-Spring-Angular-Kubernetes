@@ -1,9 +1,7 @@
 package com.App.Commerce.Models.Customer;
 
 
-import com.App.Commerce.Models.Address.AddressEntity;
-import com.App.Commerce.Models.Person.PersonEntity;
-import com.App.Commerce.Models.User.UserEntity;
+import com.App.Commerce.Models.AppUser.AppUserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +21,7 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_sequence")
     private Long id;
 
-    @OneToOne(targetEntity = UserEntity.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = AppUserEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkUser", referencedColumnName = "id")
-    private UserEntity userEntity;
+    private AppUserEntity appUserEntity;
 }

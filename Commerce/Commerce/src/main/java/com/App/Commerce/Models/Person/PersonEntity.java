@@ -3,6 +3,7 @@ package com.App.Commerce.Models.Person;
 
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
+import com.App.Commerce.Models.Role.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,7 @@ public class PersonEntity {
     @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkAddress", referencedColumnName = "id")
     private AddressEntity addressEntity;
+
 
     public PersonEntity(String firstname, String lastname, LocalDate birthDate, SexEnum sex) {
         this.firstname = firstname;

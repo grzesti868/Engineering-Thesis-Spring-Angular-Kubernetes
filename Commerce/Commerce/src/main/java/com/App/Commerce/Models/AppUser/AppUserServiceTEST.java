@@ -1,21 +1,17 @@
-package com.App.Commerce.Models.User;
+package com.App.Commerce.Models.AppUser;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
-public class UserService {
+public class AppUserServiceTEST {
 
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AppUserServiceTEST(AppUserRepository appUserRepository) {
+        this.appUserRepository = appUserRepository;
     }
 /*
 

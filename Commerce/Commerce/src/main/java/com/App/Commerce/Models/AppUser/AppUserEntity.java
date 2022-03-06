@@ -1,15 +1,17 @@
-package com.App.Commerce.Models.User;
+package com.App.Commerce.Models.AppUser;
 
 
 import com.App.Commerce.Enums.StatusEnum;
 import com.App.Commerce.Models.Person.PersonEntity;
+import com.App.Commerce.Models.Role.Role;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -18,11 +20,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class AppUserEntity {
 
     @Id
     @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 25)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+    @Setter(value = AccessLevel.PRIVATE)
     private Long id;
 
     @Column(nullable = false, name = "username")
@@ -53,8 +56,10 @@ public class UserEntity {
 
 
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles= new ArrayList<>();
 
-    public UserEntity(String username, String password, String email, StatusEnum status) {
+    public AppUserEntity(String username, String password, String email, StatusEnum status) {
         this.username = username;
         this.password = password;
         this.email = email;
