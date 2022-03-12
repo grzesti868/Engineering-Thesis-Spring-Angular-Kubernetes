@@ -1,17 +1,17 @@
 package com.App.Commerce.Models.Person;
 
-import com.App.Commerce.Models.AppUser.AppUserEntity;
-import com.App.Commerce.Models.Role.Role;
-
 import java.util.List;
 
 public interface PersonService {
 
-    List<AppUserEntity> getAll();
-    Long add(final AppUserEntity user);
-    Role saveRole(Role role);
-    void addRoleToUser(String username, String roleName);
-    //todo: wyswetil pierwsze 10? userow zamiast cala tabele?
-    AppUserEntity getUser(String username);
-    boolean validatePersonDetails(PersonEntity personEntity);
+    List<PersonEntity> getAll();
+    Long addPerson(final PersonEntity person);
+    //todo:?
+/*    Role saveRole(final Role role);
+    void addRoleToPerson(final String username, final String roleName);*/
+
+    PersonEntity update(Long id, final PersonEntity person);
+    PersonEntity getPerson(final Long id);
+    void validatePersonDetails(final PersonEntity person);
+    void deleteById(final Long id);
 }

@@ -1,0 +1,99 @@
+package com.App.Commerce.Models.Person;
+
+import com.App.Commerce.Exceptions.ApiNotFoundException;
+import com.App.Commerce.Exceptions.ApiRequestException;
+import com.App.Commerce.Models.Address.AddressEntity;
+import com.App.Commerce.Models.Address.AddressService;
+import com.App.Commerce.Models.AppUser.AppUserEntity;
+import com.App.Commerce.Models.AppUser.AppUserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class PersonServiceImpl implements PersonService{
+    private PersonRepository personRepository;
+    private AddressService addressService;
+
+    @Override
+    public List<PersonEntity> getAll() {
+        return personRepository.findAll();
+    }
+
+    @Override
+    public Long addPerson(PersonEntity person) {
+        PersonEntity newPerson = Optional.ofNullable(person)
+                .orElseThrow(() -> new ApiRequestException("New person can not be empty."));
+
+        validatePersonDetails(newPerson);
+
+        addressService.validateAddressDetails(newPerson.getAddressEntity());
+
+
+        return personRepository.save(newPerson).getId();
+    }
+
+    @Override
+    public PersonEntity update(Long id, PersonEntity person) {
+
+        PersonEntity updatePerson = Optional.ofNullable(person)
+                .orElseThrow(() -> new ApiRequestException("Person can not be empty."));
+
+        PersonEntity personToUpdate = personRepository.findById(id)
+                .orElseThrow(() -> new ApiNotFoundException("User to update does not exists"));
+
+        validatePersonDetails(updatePerson);
+
+        personToUpdate.setFirstname(updatePerson.getFirstname());
+        personToUpdate.setLastname(updatePerson.getLastname());
+        personToUpdate.setBirthDate(updatePerson.getBirthDate());
+        personToUpdate.setSex(updatePerson.getSex());
+
+
+        AddressEntity personAddress = Optional.ofNullable(updatePerson.getAddressEntity())
+                .orElseThrow(() -> new ApiNotFoundException("Adress details can not be empty."));
+
+        addressService.validateAddressDetails(personAddress);
+
+        personToUpdate.setAddressEntity(personAddress);
+
+
+        return personRepository.save(personToUpdate);
+    }
+
+    @Override
+    public PersonEntity getPerson(Long id) {
+        return personRepository.findById(id)
+                .orElseThrow(() -> new ApiNotFoundException(String.format("Person %s was not found.", id)));
+    }
+
+    @Override
+    public void validatePersonDetails(PersonEntity person) {
+        Optional.ofNullable(person.getSex())
+                .orElseThrow(() -> new ApiRequestException("Sex can not be null."));
+
+        Optional.ofNullable(person.getFirstname())
+                .orElseThrow(() -> new ApiRequestException("Firstname  can not be null."));
+
+        Optional.ofNullable(person.getLastname())
+                .orElseThrow(() -> new ApiRequestException("Lastname can not be null."));
+
+        Optional.ofNullable(person.getBirthDate())
+                .orElseThrow(() -> new ApiRequestException("Birthdate can not be null."));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (personRepository.existsById(id))
+            personRepository.deleteById(id);
+        else
+            throw new ApiNotFoundException(String.format("Person by id: %s does not exists", id));
+    }
+}

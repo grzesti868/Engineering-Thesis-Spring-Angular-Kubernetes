@@ -30,7 +30,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
-    public Long add(AppUserEntity user) {
+    public Long addUser(AppUserEntity user) {
         AppUserEntity newUser = Optional.ofNullable(user)
                 .orElseThrow(() -> new ApiRequestException("New user can not be empty."));
 
@@ -70,11 +70,24 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public void validateUserDetails(AppUserEntity user) {
 
+        Optional.ofNullable(user.getUsername())
+                .orElseThrow(() -> new ApiRequestException("Username can not be empty."));
+
         if (appUserRepository.existsByUsername(user.getUsername()))
             throw new ApiRequestException("Username already exists.");
 
         if (appUserRepository.existsByEmail(user.getEmail()))
             throw new ApiRequestException("User's email already taken");
+
+
+        Optional.ofNullable(user.getPassword())
+                .orElseThrow(() -> new ApiRequestException("Password can not be empty."));
+
+        Optional.ofNullable(user.getEmail())
+                .orElseThrow(() -> new ApiRequestException("Email can not be empty."));
+
+        Optional.ofNullable(user.getStatus())
+                .orElseThrow(() -> new ApiRequestException("Status can not be empty."));
 
     }
 
@@ -87,29 +100,31 @@ public class AppUserServiceImpl implements AppUserService {
         AppUserEntity userToUpdate = Optional.ofNullable(appUserRepository.findByUsername(username))
                 .orElseThrow(() -> new ApiNotFoundException("User to update does not exists"));
 
-        if (appUserRepository.existsByUsername(username))
-            userToUpdate.setUsername(updateUser.getUsername());
-        else
-            throw new ApiRequestException("Username already taken");
 
+        validateUserDetails(updateUser);
 
-        if (appUserRepository.existsByEmail(updateUser.getEmail()))
-            userToUpdate.setEmail(updateUser.getUsername());
-        else
-            throw new ApiRequestException("Email already taken");
-
+        userToUpdate.setEmail(updateUser.getEmail());
+        userToUpdate.setUsername(updateUser.getUsername());
         userToUpdate.setPassword(updateUser.getPassword());
         userToUpdate.setStatus(updateUser.getStatus());
 
         PersonEntity updatePerson = Optional.ofNullable(updateUser.getPersonEntity())
-                .orElseThrow(() -> new ApiNotFoundException("Person details can not be empty."));
+                .orElseThrow(() -> new ApiNotFoundException("Person's details can not be empty."));
 
-        //todo: impl
-        //personService.update(updatePerson)
+        personService.validatePersonDetails(updatePerson);
+        userToUpdate.setPersonEntity(updatePerson);
 
 
         return appUserRepository.save(userToUpdate);
 
+    }
+
+    @Override
+    public void deleteByUsername(String username) {
+        if (appUserRepository.existsByUsername(username))
+            appUserRepository.deleteByUsername(username);
+        else
+            throw new ApiNotFoundException(String.format("User by username: %s does not exists", username));
     }
 }
 

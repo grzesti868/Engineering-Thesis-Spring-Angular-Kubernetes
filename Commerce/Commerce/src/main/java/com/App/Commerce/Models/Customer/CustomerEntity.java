@@ -2,6 +2,7 @@ package com.App.Commerce.Models.Customer;
 
 
 import com.App.Commerce.Models.AppUser.AppUserEntity;
+import com.App.Commerce.Models.AppUser.AppUserRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

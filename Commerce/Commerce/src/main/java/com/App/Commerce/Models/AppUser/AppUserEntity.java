@@ -1,13 +1,14 @@
 package com.App.Commerce.Models.AppUser;
 
-
 import com.App.Commerce.Enums.StatusEnum;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Role.Role;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 
 import javax.persistence.*;
 import java.util.ArrayList;
