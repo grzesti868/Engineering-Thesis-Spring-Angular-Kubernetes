@@ -38,4 +38,7 @@ public class Role {
     @Setter(value = AccessLevel.PRIVATE)
     private Date updatedOn;
 
+    public Role(String name) {
+        this.name = name;
+    }
 }

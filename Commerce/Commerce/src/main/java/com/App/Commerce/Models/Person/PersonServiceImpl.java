@@ -29,22 +29,17 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public Long addPerson(PersonEntity person) {
-        PersonEntity newPerson = Optional.ofNullable(person)
-                .orElseThrow(() -> new ApiRequestException("New person can not be empty."));
 
-        validatePersonDetails(newPerson);
+        validatePersonDetails(person);
 
-        addressService.validateAddressDetails(newPerson.getAddressEntity());
+        addressService.validateAddressDetails(person.getAddressEntity());
 
-
-        return personRepository.save(newPerson).getId();
+        return personRepository.save(person).getId();
     }
 
     @Override
-    public PersonEntity update(Long id, PersonEntity person) {
+    public PersonEntity update(Long id, PersonEntity updatePerson) {
 
-        PersonEntity updatePerson = Optional.ofNullable(person)
-                .orElseThrow(() -> new ApiRequestException("Person can not be empty."));
 
         PersonEntity personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ApiNotFoundException("User to update does not exists"));
@@ -76,6 +71,10 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public void validatePersonDetails(PersonEntity person) {
+
+        Optional.ofNullable(person)
+                .orElseThrow(() -> new ApiRequestException("Person can not be empty."));
+
         Optional.ofNullable(person.getSex())
                 .orElseThrow(() -> new ApiRequestException("Sex can not be null."));
 

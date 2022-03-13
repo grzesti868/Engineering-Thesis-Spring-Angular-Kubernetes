@@ -9,8 +9,7 @@ public interface PersonService {
     //todo:?
 /*    Role saveRole(final Role role);
     void addRoleToPerson(final String username, final String roleName);*/
-
-    PersonEntity update(Long id, final PersonEntity person);
+    PersonEntity update(Long id, final PersonEntity updatePerson);
     PersonEntity getPerson(final Long id);
     void validatePersonDetails(final PersonEntity person);
     void deleteById(final Long id);

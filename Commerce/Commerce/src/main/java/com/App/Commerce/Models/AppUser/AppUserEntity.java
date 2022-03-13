@@ -57,7 +57,13 @@ public class AppUserEntity {
 
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @JoinColumn(name = "FkPerson", referencedColumnName = "id")
     private Collection<Role> roles= new ArrayList<>();
 
     public AppUserEntity(String username, String password, String email, StatusEnum status) {

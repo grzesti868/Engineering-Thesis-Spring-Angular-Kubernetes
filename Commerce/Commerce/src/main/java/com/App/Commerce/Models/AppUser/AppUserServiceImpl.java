@@ -25,30 +25,32 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public List<AppUserEntity> getAll() {
+        log.info("Fetching all users.");
         return appUserRepository.findAll();
     }
 
 
     @Override
     public Long addUser(AppUserEntity user) {
-        AppUserEntity newUser = Optional.ofNullable(user)
-                .orElseThrow(() -> new ApiRequestException("New user can not be empty."));
+        log.info("Saving new user {} to database", user.getUsername() );
+        validateUserDetails(user);
 
-        validateUserDetails(newUser);
+        personService.validatePersonDetails(user.getPersonEntity());
 
-        personService.validatePersonDetails(newUser.getPersonEntity());
-
-
-        return appUserRepository.save(newUser).getId();
+        return appUserRepository.save(user).getId();
     }
 
     @Override
     public Role saveRole(Role role) {
+        log.info("Saving new role {} to database", role.getName());
         return roleRepository.save(role);
+
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) {
+        log.info("Adding role {} to a user {}", roleName, username );
+
         AppUserEntity user = Optional.ofNullable(appUserRepository.findByUsername(username))
                 .orElseThrow(() -> new ApiNotFoundException(String.format("User %s was not found.", username)));
 
@@ -57,10 +59,13 @@ public class AppUserServiceImpl implements AppUserService {
 
 
         user.getRoles().add(role);
+        //TODO: jesli zadziala usunac transactional;
+        appUserRepository.save(user);
     }
 
     @Override
     public AppUserEntity getUser(String username) {
+        log.info("Fetching user {} form database", username);
         return Optional.ofNullable(appUserRepository.findByUsername(username))
                 .orElseThrow(() -> new ApiNotFoundException(String.format("User %s was not found.", username)));
 
@@ -69,6 +74,10 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public void validateUserDetails(AppUserEntity user) {
+        log.info("Validating user {}...", user.getUsername());
+
+        Optional.ofNullable(user)
+                .orElseThrow(() -> new ApiRequestException("New user can not be empty."));
 
         Optional.ofNullable(user.getUsername())
                 .orElseThrow(() -> new ApiRequestException("Username can not be empty."));
@@ -89,14 +98,12 @@ public class AppUserServiceImpl implements AppUserService {
         Optional.ofNullable(user.getStatus())
                 .orElseThrow(() -> new ApiRequestException("Status can not be empty."));
 
+        log.info("Validation of user {} complete!", user.getUsername());
     }
 
     @Override
-    public AppUserEntity update(String username, AppUserEntity user) {
-
-        AppUserEntity updateUser = Optional.ofNullable(user)
-                .orElseThrow(() -> new ApiRequestException("User can not be empty."));
-
+    public AppUserEntity update(String username, AppUserEntity updateUser) {
+        log.info("Updating user {}...", username);
         AppUserEntity userToUpdate = Optional.ofNullable(appUserRepository.findByUsername(username))
                 .orElseThrow(() -> new ApiNotFoundException("User to update does not exists"));
 
@@ -121,6 +128,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public void deleteByUsername(String username) {
+        log.info("Deleting user {} from database.", username);
         if (appUserRepository.existsByUsername(username))
             appUserRepository.deleteByUsername(username);
         else
