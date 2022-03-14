@@ -8,9 +8,16 @@ import com.App.Commerce.Models.Role.Role;
 import com.App.Commerce.Models.Role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.User;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class AppUserServiceImpl implements AppUserService {
+public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PersonService personService;
@@ -29,15 +36,19 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserRepository.findAll();
     }
 
-
     @Override
-    public Long addUser(AppUserEntity user) {
-        log.info("Saving new user {} to database", user.getUsername() );
-        validateUserDetails(user);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUserEntity user = Optional.ofNullable(appUserRepository.findByUsername(username))
+                .orElseThrow(() -> new ApiNotFoundException(String.format("User %s was not found.",username)));
+        log.info("User found in the database: {}", username);
 
-        personService.validatePersonDetails(user.getPersonEntity());
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
 
-        return appUserRepository.save(user).getId();
+        return new User(user.getUsername(), user.getPassword(), authorities );
+
     }
 
     @Override
@@ -62,6 +73,17 @@ public class AppUserServiceImpl implements AppUserService {
         //TODO: jesli zadziala usunac transactional;
         appUserRepository.save(user);
     }
+
+    @Override
+    public Long addUser(AppUserEntity user) {
+        log.info("Saving new user {} to database", user.getUsername() );
+        validateUserDetails(user);
+
+        personService.validatePersonDetails(user.getPersonEntity());
+
+        return appUserRepository.save(user).getId();
+    }
+
 
     @Override
     public AppUserEntity getUser(String username) {
@@ -134,5 +156,7 @@ public class AppUserServiceImpl implements AppUserService {
         else
             throw new ApiNotFoundException(String.format("User by username: %s does not exists", username));
     }
+
+
 }
 
