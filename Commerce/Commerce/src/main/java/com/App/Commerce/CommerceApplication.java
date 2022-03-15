@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 //TODO: put mapping username zeby nie byl zajety/ten sam(!Object.equals(user.getName(),newName))  && username > 0
 //TODO: co to jest to transactional
 //TODO: save role z app user to Role pakietu/
+//TODO: haslo dla super admina dodac w app.properties i w config je wywolac (dodac jako pole)
 @SpringBootApplication
 public class CommerceApplication {
 

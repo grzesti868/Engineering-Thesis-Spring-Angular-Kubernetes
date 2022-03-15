@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
@@ -30,6 +31,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PersonService personService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<AppUserEntity> getAll() {
@@ -78,6 +80,8 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
     @Override
     public Long addUser(AppUserEntity user) {
         log.info("Saving new user {} to database", user.getUsername() );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("User's password encoded: {}.", user.getPassword());
         validateUserDetails(user);
 
         personService.validatePersonDetails(user.getPersonEntity());

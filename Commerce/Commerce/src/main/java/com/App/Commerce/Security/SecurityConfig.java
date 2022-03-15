@@ -20,6 +20,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -42,8 +45,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .anyRequest()
-                        .permitAll()
+                        .antMatchers("/login").permitAll()
+                .and()
+                    .authorizeRequests()
+                        .anyRequest().authenticated()
+                .and()
+                    .authorizeRequests()
+                        .antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_USER")
+                .and()
+                    .authorizeRequests()
+                        .antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_ADMIN")
+                .and()
+                    .authorizeRequests()
+                        .antMatchers(POST, "/api/v1/users/save/**").hasAnyAuthority("ROLE_ADMIN")
                 .and()
                     .addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
 
