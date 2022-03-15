@@ -6,6 +6,7 @@ import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Person.PersonService;
 import com.App.Commerce.Models.Role.Role;
 import com.App.Commerce.Models.Role.RoleRepository;
+import com.App.Commerce.Models.Role.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class AppUserServiceImpl implements AppUserService, UserDetailsService {
+public class AppUserServiceImpl implements AppUserService, UserDetailsService{
     private final AppUserRepository appUserRepository;
     private final RoleRepository roleRepository;
     private final PersonService personService;
