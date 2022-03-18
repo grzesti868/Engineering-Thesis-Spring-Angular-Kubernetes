@@ -31,13 +31,15 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final CustomAlgorithmImpl customAlgorithm;
 
-
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, CustomAlgorithmImpl customAlgorithm) {
         this.authenticationManager = authenticationManager;
+        this.customAlgorithm = customAlgorithm;
     }
 
     @Override
@@ -53,12 +55,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        //todo: change to encrypted secret and pass from example utility class
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+         Algorithm algorithm = customAlgorithm.getAlgorith() ;
+        //Algorithm algorithm = Algorithm.HMAC256("My secret".getBytes());;
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000 ))
                 .withIssuer(request.getRequestURL().toString())
+                //todo: roles to app.prop
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
@@ -66,6 +69,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000 ))
                 .withIssuer(request.getRequestURL().toString())
+                //todo: "roles" to app.prop
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
         /* TODO: RETURN VALUES IN HEADER

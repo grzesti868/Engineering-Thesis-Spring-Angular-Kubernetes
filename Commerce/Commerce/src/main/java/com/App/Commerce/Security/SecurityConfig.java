@@ -6,7 +6,9 @@ package com.App.Commerce.Security;
  * @version 1.0
  */
 
+import com.App.Commerce.Filter.CustomAlgorithmImpl;
 import com.App.Commerce.Filter.CustomAuthenticationFilter;
+import com.App.Commerce.Filter.CustomAuthorizationFilter;
 import com.App.Commerce.Models.AppUser.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -30,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CustomAlgorithmImpl customAlgorithm;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,6 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), customAlgorithm);
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+
         http
                 .csrf()
                     .disable()
@@ -45,13 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/login").permitAll()
-                .and()
-                    .authorizeRequests()
-                        .anyRequest().authenticated()
-                .and()
-                    .authorizeRequests()
-                        .antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_USER")
+                        .antMatchers("/api/v1/login").permitAll()
                 .and()
                     .authorizeRequests()
                         .antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_ADMIN")
@@ -59,8 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                         .antMatchers(POST, "/api/v1/users/save/**").hasAnyAuthority("ROLE_ADMIN")
                 .and()
-                    .addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-
+                    .authorizeRequests()
+                    .anyRequest().authenticated()
+                .and()
+                    .addFilter(customAuthenticationFilter)
+                    .addFilterBefore(new CustomAuthorizationFilter(customAlgorithm), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

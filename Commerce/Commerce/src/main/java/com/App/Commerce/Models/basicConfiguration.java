@@ -31,9 +31,13 @@ public class basicConfiguration {
             AppUserEntity user2 = new AppUserEntity("greg2","pass2","email2",  StatusEnum.Active);
 
             PersonEntity person = new PersonEntity("Grzegorz","Stich", LocalDate.now(), SexEnum.Male);
+            PersonEntity person2 = new PersonEntity("Grz22egorz","S22tich", LocalDate.now(), SexEnum.Male);
             AddressEntity address = new AddressEntity("Street1","12a","2","Warszawa","12-345","Polska");
+            AddressEntity address2 = new AddressEntity("Street21","12a2","22","Wa2rszawa","12-345","Polska");
             person.setAddressEntity(address);
+            person2.setAddressEntity(address2);
             user1.setPersonEntity(person);
+            user2.setPersonEntity(person2);
 
             appUserService.saveRole(new Role("ROLE_USER"));
             appUserService.saveRole(new Role("ROLE_MANAGER"));
@@ -41,7 +45,8 @@ public class basicConfiguration {
             appUserService.saveRole(new Role("ROLE_SUPER_ADMIN"));
 
             appUserService.addUser(user1);
-            appUserRepository.save(user2);
+            appUserService.addUser(user2);
+            //appUserRepository.save(user2);
 
             appUserService.addRoleToUser(user2.getUsername(),"ROLE_USER");
             appUserService.addRoleToUser(user2.getUsername(),"ROLE_MANAGER");
