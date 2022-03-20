@@ -1,4 +1,10 @@
-package com.App.Commerce.Models;
+/*
+ * Copyright (c) 2022.
+ * @author Grzegorz Stich
+ * @version 1.0
+ */
+
+package com.App.Commerce.Configs;
 
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Enums.StatusEnum;
@@ -38,7 +44,7 @@ public class basicConfiguration {
             person2.setAddressEntity(address2);
             user1.setPersonEntity(person);
             user2.setPersonEntity(person2);
-
+            //todo: basic Role do jakiegos enum??
             appUserService.saveRole(new Role("ROLE_USER"));
             appUserService.saveRole(new Role("ROLE_MANAGER"));
             appUserService.saveRole(new Role("ROLE_ADMIN"));
@@ -51,6 +57,7 @@ public class basicConfiguration {
             appUserService.addRoleToUser(user2.getUsername(),"ROLE_USER");
             appUserService.addRoleToUser(user2.getUsername(),"ROLE_MANAGER");
             appUserService.addRoleToUser(user1.getUsername(),"ROLE_ADMIN");
+            appUserService.addRoleToUser(user1.getUsername(),"ROLE_USER");
 
 
 

@@ -6,6 +6,7 @@
 
 package com.App.Commerce.Filter;
 
+import com.App.Commerce.Configs.JwtConfigProperties;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -37,27 +39,32 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     private final CustomAlgorithmImpl customAlgorithm;
+    private final JwtConfigProperties jwtConfigProperties;
 
-    private static final String PREFIX="Bearer ";
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/api/v1/login")){
+        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")){
             filterChain.doFilter(request, response);
         } else {
-
+            String prefix=jwtConfigProperties.getPrefix();
+            String prefix2="Bearer ";
+            String claim = jwtConfigProperties.getClaimName();
             String authorizationHeader = request.getHeader(AUTHORIZATION);
-            if (authorizationHeader != null && authorizationHeader.startsWith(PREFIX)) {
+            System.out.println("*** CustomAuthorizationFilter ***");
+            System.out.println("Prefix: "+prefix);
+            System.out.println("claim: "+claim);
+            System.out.println("authorizationHeader: "+authorizationHeader);
+            if (authorizationHeader != null && authorizationHeader.startsWith(prefix)) {
                 try {
-                    String token = authorizationHeader.substring(PREFIX.length());
+                    String token = authorizationHeader.substring(prefix.length());
                     Algorithm algorithm = customAlgorithm.getAlgorith();
-                    //Algorithm algorithm = Algorithm.HMAC256("My secret".getBytes());;
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
                     //todo: roles to app.prop
-                    String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+                    String[] roles = decodedJWT.getClaim(claim).asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> {
                         authorities.add(new SimpleGrantedAuthority(role));

@@ -6,11 +6,14 @@ package com.App.Commerce.Security;
  * @version 1.0
  */
 
+import com.App.Commerce.Configs.JwtConfigProperties;
 import com.App.Commerce.Filter.CustomAlgorithmImpl;
 import com.App.Commerce.Filter.CustomAuthenticationFilter;
 import com.App.Commerce.Filter.CustomAuthorizationFilter;
 import com.App.Commerce.Models.AppUser.AppUserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CustomAlgorithmImpl customAlgorithm;
+    private final JwtConfigProperties jwtConfigProperties;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -43,8 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), customAlgorithm);
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), customAlgorithm, jwtConfigProperties);
+        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 
         http
                 .csrf()
@@ -53,19 +57,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/api/v1/login").permitAll()
+                        .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
                 .and()
                     .authorizeRequests()
-                        .antMatchers(GET, "/api/v1/users/**").hasAnyAuthority("ROLE_ADMIN")
+                        .antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_ADMIN")
                 .and()
                     .authorizeRequests()
-                        .antMatchers(POST, "/api/v1/users/save/**").hasAnyAuthority("ROLE_ADMIN")
+                        .antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
                 .and()
                     .authorizeRequests()
                     .anyRequest().authenticated()
                 .and()
                     .addFilter(customAuthenticationFilter)
-                    .addFilterBefore(new CustomAuthorizationFilter(customAlgorithm), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new CustomAuthorizationFilter(customAlgorithm, jwtConfigProperties), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

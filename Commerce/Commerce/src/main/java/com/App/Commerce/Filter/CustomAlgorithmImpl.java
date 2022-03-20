@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomAlgorithmImpl {
-
+    //todo: refactor
     private static final String SECRET = "My secret";
 
 
