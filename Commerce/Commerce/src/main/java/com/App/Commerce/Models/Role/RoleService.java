@@ -8,5 +8,4 @@ package com.App.Commerce.Models.Role;
 
 public interface RoleService {
     Role saveRole(final Role role);
-    void addRoleToUser(final String username, String roleName);
 }

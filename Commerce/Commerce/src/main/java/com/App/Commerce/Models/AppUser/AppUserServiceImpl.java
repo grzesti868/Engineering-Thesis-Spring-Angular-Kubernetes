@@ -32,7 +32,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
     private final RoleRepository roleRepository;
     private final PersonService personService;
     private final PasswordEncoder passwordEncoder;
-
+    private final RoleService roleService;
     @Override
     public List<AppUserEntity> getAll() {
         log.info("Fetching all users.");
@@ -54,11 +54,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
 
     }
 
+
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving new role {} to database", role.getName());
-        return roleRepository.save(role);
-
+        return roleService.saveRole(role);
     }
 
     @Override
@@ -74,7 +73,8 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
 
         user.getRoles().add(role);
         //TODO: jesli zadziala usunac transactional;
-        appUserRepository.save(user);
+        log.info("Role was added.");
+        //appUserRepository.save(user);
     }
 
     @Override

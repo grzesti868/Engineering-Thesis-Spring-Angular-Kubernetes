@@ -12,5 +12,6 @@ public interface AppUserService extends RoleService {
     void validateUserDetails(final AppUserEntity user);
     AppUserEntity update(final String username, final AppUserEntity updateUser);
     void deleteByUsername(final String username);
+    void addRoleToUser(String username, String roleName);
 
-}
+    }

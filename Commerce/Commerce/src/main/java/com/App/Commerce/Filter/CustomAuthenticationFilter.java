@@ -67,7 +67,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         System.out.println("claim: "+claim);
         System.out.println("refreshTokenExp: "+refreshTokenExp);
         System.out.println("accessTokenExp: "+accessTokenExp);
-
+    //TODO: access i refresh sie duzo duplikuje w klasach -> refaktor do osobnej klasy
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 //todo: czas tokena wrzucic do app.prop

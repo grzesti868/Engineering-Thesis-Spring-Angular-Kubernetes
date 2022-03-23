@@ -49,13 +49,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             String prefix=jwtConfigProperties.getPrefix();
-            String prefix2="Bearer ";
             String claim = jwtConfigProperties.getClaimName();
             String authorizationHeader = request.getHeader(AUTHORIZATION);
-            System.out.println("*** CustomAuthorizationFilter ***");
-            System.out.println("Prefix: "+prefix);
-            System.out.println("claim: "+claim);
-            System.out.println("authorizationHeader: "+authorizationHeader);
             if (authorizationHeader != null && authorizationHeader.startsWith(prefix)) {
                 try {
                     String token = authorizationHeader.substring(prefix.length());

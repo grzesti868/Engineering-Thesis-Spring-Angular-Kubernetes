@@ -44,20 +44,16 @@ public class basicConfiguration {
             person2.setAddressEntity(address2);
             user1.setPersonEntity(person);
             user2.setPersonEntity(person2);
-            //todo: basic Role do jakiegos enum??
-            appUserService.saveRole(new Role("ROLE_USER"));
+            appUserService.saveRole(new Role("ROLE_CUSTOMER"));
             appUserService.saveRole(new Role("ROLE_MANAGER"));
             appUserService.saveRole(new Role("ROLE_ADMIN"));
-            appUserService.saveRole(new Role("ROLE_SUPER_ADMIN"));
 
             appUserService.addUser(user1);
             appUserService.addUser(user2);
-            //appUserRepository.save(user2);
 
-            appUserService.addRoleToUser(user2.getUsername(),"ROLE_USER");
-            appUserService.addRoleToUser(user2.getUsername(),"ROLE_MANAGER");
+            appUserService.addRoleToUser(user2.getUsername(),"ROLE_CUSTOMER");
+            appUserService.addRoleToUser(user1.getUsername(),"ROLE_MANAGER");
             appUserService.addRoleToUser(user1.getUsername(),"ROLE_ADMIN");
-            appUserService.addRoleToUser(user1.getUsername(),"ROLE_USER");
 
 
 

@@ -5,6 +5,8 @@ import com.App.Commerce.Configs.JwtConfigProperties;
 import com.App.Commerce.Exceptions.ApiRequestException;
 import com.App.Commerce.Filter.CustomAlgorithmImpl;
 import com.App.Commerce.Models.Role.Role;
+import com.App.Commerce.Models.Role.RoleService;
+import com.App.Commerce.Models.RoleToUserForm.RoleToUserForm;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -33,7 +35,6 @@ import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -46,6 +47,7 @@ public class AppUsersController {
     private final AppUserService appUserService;
     private final JwtConfigProperties jwtConfigProperties;
     private final CustomAlgorithmImpl customAlgorithm;
+
     @GetMapping("/users")
     public ResponseEntity<List<AppUserEntity>> listAllUsers() {
         final List<AppUserEntity> userList = appUserService.getAll();
@@ -55,12 +57,11 @@ public class AppUsersController {
 
     @GetMapping("{username}")
     public ResponseEntity<AppUserEntity> getUserByName(@PathVariable final String username) {
-
         return ResponseEntity.ok().body(appUserService.getUser(username));
     }
 
     //todo: czy potrzebne consumes = APPLICATION_JSON_VALUE
-    @PostMapping(path = "/user/save")
+    @PostMapping("/user/save")
     public ResponseEntity<String> addUser(@RequestBody final AppUserEntity user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/users/u/save").toUriString());
         return ResponseEntity.created(uri).body("User has been added, Id: " + appUserService.addUser(user));
@@ -79,30 +80,27 @@ public class AppUsersController {
         appUserService.deleteByUsername(username);
         return ResponseEntity.ok("User has been deleted.");
     }
-
+    //todo: refaktor to role service?
     @PostMapping("/role/save")
     public ResponseEntity<String> addRole(@RequestBody final Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/users/role/save").toUriString());
         return ResponseEntity.created(uri).body("Role has been added, name: " + appUserService.saveRole(role).getName());
     }
-
     @PostMapping("/role/addtouser")
     public ResponseEntity<String> addRoleToUser(@RequestBody final RoleToUserForm form) {
-        appUserService.addRoleToUser(form.getUsername(), form.rolename);
+        appUserService.addRoleToUser(form.getUsername(), form.getRolename());
         return ResponseEntity.ok().build();
     }
-
+    //todo: refaktor to token service?
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
 
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         String prefix = jwtConfigProperties.getPrefix();
         String claim = jwtConfigProperties.getClaimName();
         Integer accessTokenExpiration= jwtConfigProperties.getAccessTokenExpiration();
-        System.out.println("prefix: "+prefix);
-        System.out.println("claim: "+claim);
-        System.out.println("authorizationHeader: "+authorizationHeader);
-        System.out.println("accessTokenExpiration: "+accessTokenExpiration);
 
         if(authorizationHeader !=null && authorizationHeader.startsWith(prefix)) {
             try{
@@ -121,30 +119,25 @@ public class AppUsersController {
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("accessToken", accessToken);
                 tokens.put("refreshToken", refreshToken);
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
             } catch (Exception err) {
                 response.setHeader("error", err.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 Map<String, String> error = new HashMap<>();
                 error.put("error_message", err.getMessage());
-                response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
+                response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
         } else {
-            //todo: refactor na custom exeption
-            throw new RuntimeException("Refresh token is missing!");
+            throw new ApiRequestException("Refresh token is missing!");
         }
 
     }
 
 
     //todo: refaktor?
-    @Data
-    class RoleToUserForm {
-        private String username;
-        private String rolename;
-    }
+
 
 /*
     @GetMapping

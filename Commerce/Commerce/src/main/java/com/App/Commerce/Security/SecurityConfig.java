@@ -1,10 +1,10 @@
-package com.App.Commerce.Security;
-
 /*
  * Copyright (c) 2022.
  * @author Grzegorz Stich
  * @version 1.0
  */
+
+package com.App.Commerce.Security;
 
 import com.App.Commerce.Configs.JwtConfigProperties;
 import com.App.Commerce.Filter.CustomAlgorithmImpl;
@@ -60,10 +60,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/api/login/**", "/api/token/refresh/**").permitAll()
                 .and()
                     .authorizeRequests()
-                        .antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_ADMIN")
+                        .antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_MANAGER", "ROLE_ADMIN")
                 .and()
                     .authorizeRequests()
                         .antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN")
+                .and()
+                    .authorizeRequests()
+                        .antMatchers(POST, "/api/role/**").hasAnyAuthority("ROLE_ADMIN")
                 .and()
                     .authorizeRequests()
                     .anyRequest().authenticated()
