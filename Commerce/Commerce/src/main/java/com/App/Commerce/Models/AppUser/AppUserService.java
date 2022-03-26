@@ -3,6 +3,9 @@ package com.App.Commerce.Models.AppUser;
 import com.App.Commerce.Models.Role.Role;
 import com.App.Commerce.Models.Role.RoleService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 public interface AppUserService extends RoleService {
@@ -13,5 +16,5 @@ public interface AppUserService extends RoleService {
     AppUserEntity update(final String username, final AppUserEntity updateUser);
     void deleteByUsername(final String username);
     void addRoleToUser(String username, String roleName);
-
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
     }

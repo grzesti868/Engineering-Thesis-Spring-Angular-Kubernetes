@@ -1,12 +1,19 @@
 package com.App.Commerce.Models.AppUser;
 
+import com.App.Commerce.Configs.JwtConfigProperties;
 import com.App.Commerce.Exceptions.ApiNotFoundException;
 import com.App.Commerce.Exceptions.ApiRequestException;
+import com.App.Commerce.Filter.CustomAlgorithmImpl;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Person.PersonService;
 import com.App.Commerce.Models.Role.Role;
 import com.App.Commerce.Models.Role.RoleRepository;
 import com.App.Commerce.Models.Role.RoleService;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,10 +25,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +45,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
     private final PersonService personService;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final JwtConfigProperties jwtConfigProperties;
+    private final CustomAlgorithmImpl customAlgorithm;
+
     @Override
     public List<AppUserEntity> getAll() {
         log.info("Fetching all users.");
@@ -72,9 +87,50 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
 
 
         user.getRoles().add(role);
-        //TODO: jesli zadziala usunac transactional;
         log.info("Role was added.");
-        //appUserRepository.save(user);
+
+    }
+
+    @Override
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String prefix = jwtConfigProperties.getPrefix();
+        String claim = jwtConfigProperties.getClaimName();
+        Integer accessTokenExpiration= jwtConfigProperties.getAccessTokenExpiration();
+
+        if(authorizationHeader !=null && authorizationHeader.startsWith(prefix)) {
+            try{
+                String refreshToken = authorizationHeader.substring(prefix.length());
+                Algorithm algorithm = customAlgorithm.getAlgorith();
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refreshToken);
+                String username = decodedJWT.getSubject();
+                AppUserEntity user = getUser(username);
+                String accessToken = JWT.create()
+                        .withSubject(user.getUsername())
+                        .withExpiresAt(new java.sql.Date(System.currentTimeMillis() + accessTokenExpiration ))
+                        .withIssuer(request.getRequestURL().toString())
+                        .withClaim(claim, user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                        .sign(algorithm);
+                Map<String, String> tokens = new HashMap<>();
+                tokens.put("accessToken", accessToken);
+                tokens.put("refreshToken", refreshToken);
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+            } catch (Exception err) {
+                response.setHeader("error", err.getMessage());
+                response.setStatus(FORBIDDEN.value());
+                Map<String, String> error = new HashMap<>();
+                error.put("error_message", err.getMessage());
+                response.setContentType(APPLICATION_JSON_VALUE);
+                new ObjectMapper().writeValue(response.getOutputStream(), error);
+            }
+        } else {
+            throw new ApiRequestException("Refresh token is missing!");
+        }
+
     }
 
     @Override

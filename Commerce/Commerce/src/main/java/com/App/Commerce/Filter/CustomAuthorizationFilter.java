@@ -45,12 +45,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/token/refresh")){
+        log.info("Start authenticating request");
+        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/users/token/refresh")){
             filterChain.doFilter(request, response);
         } else {
             String prefix=jwtConfigProperties.getPrefix();
             String claim = jwtConfigProperties.getClaimName();
             String authorizationHeader = request.getHeader(AUTHORIZATION);
+
             if (authorizationHeader != null && authorizationHeader.startsWith(prefix)) {
                 try {
                     String token = authorizationHeader.substring(prefix.length());
@@ -58,8 +60,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
-                    //todo: roles to app.prop
+                    log.info("decoded user: "+username);
                     String[] roles = decodedJWT.getClaim(claim).asArray(String.class);
+                    log.info("user's roles: "+ Arrays.toString(roles));
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     stream(roles).forEach(role -> {
                         authorities.add(new SimpleGrantedAuthority(role));

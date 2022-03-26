@@ -7,9 +7,13 @@
 package com.App.Commerce.Filter;
 
 import com.App.Commerce.Configs.JwtConfigProperties;
+import com.App.Commerce.Exceptions.ApiRequestException;
+import com.App.Commerce.Models.Credentials.Credentials;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,10 +29,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -44,48 +50,51 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-       String username = request.getParameter("username");
-       String password = request.getParameter("password");
-       log.info("User is: {}, ",username);
-       log.info("Password is: {}, ",password);
-       UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-       //todo: 1:08:08 oraz 1:23:10 oraz 1:25:00 (uzyc Mapper by sparsowac json object z body, request) wziac z request body i zmpaowac zamiast z repsonse?
-       return authenticationManager.authenticate(authenticationToken);
+        log.info("attemptAuthentication started");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json;
+        Credentials credentials;
+        String username;
+        String password;
+        try {
+            json = request.getReader().lines().collect(Collectors.joining());
+            credentials = objectMapper.readValue(json, Credentials.class);
+
+            username=credentials.getUsername();
+            password=credentials.getPassword();
+            log.info("User is: {}, ", username);
+        } catch (IOException e) {
+            throw new ApiRequestException("Provided credentials are invalid!");
+        }
+        log.info("User is: {}, ", username);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = customAlgorithm.getAlgorith() ;
-        String prefix=jwtConfigProperties.getPrefix();
+        Algorithm algorithm = customAlgorithm.getAlgorith();
         String claim = jwtConfigProperties.getClaimName();
         Integer refreshTokenExp = jwtConfigProperties.getRefreshTokenExpiration();
         Integer accessTokenExp = jwtConfigProperties.getAccessTokenExpiration();
 
-        System.out.println("*** CustomAuthenticationFilter ***");
-        System.out.println("Prefix: "+prefix);
-        System.out.println("claim: "+claim);
-        System.out.println("refreshTokenExp: "+refreshTokenExp);
-        System.out.println("accessTokenExp: "+accessTokenExp);
-    //TODO: access i refresh sie duzo duplikuje w klasach -> refaktor do osobnej klasy
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                //todo: czas tokena wrzucic do app.prop
-                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExp ))
+                .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExp))
                 .withIssuer(request.getRequestURL().toString())
-                //todo: roles to app.prop
                 .withClaim(claim, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
+
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                //todo: czas tokena wrzucic do app.prop
-                .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExp ))
+                .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExp))
                 .withIssuer(request.getRequestURL().toString())
-                //todo: "roles" to app.prop
-                //.withClaim(claim, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
-        /* TODO: RETURN VALUES IN HEADER
+
+        /*RETURN VALUES IN HEADER
         response.setHeader("accessToken", accessToken);
         response.setHeader("refreshToken", refreshToken);*/
         //RETURN AS A BODY

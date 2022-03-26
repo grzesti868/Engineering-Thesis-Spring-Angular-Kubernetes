@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,5 +96,13 @@ public class PersonServiceImpl implements PersonService{
             personRepository.deleteById(id);
         else
             throw new ApiNotFoundException(String.format("Person by id: %s does not exists", id));
+    }
+
+    @Override
+    public Period getAge(final Long id) {
+        PersonEntity person = personRepository.findById(id)
+                .orElseThrow(() -> new ApiNotFoundException(String.format("Person %s was not found.", id)));
+
+        return Period.between(person.getBirthDate(), LocalDate.now());
     }
 }
