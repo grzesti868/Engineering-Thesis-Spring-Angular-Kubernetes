@@ -10,6 +10,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 //TODO: ogarnac endpointy
 //TODO: przechwycic wyjatek jak bledne dane przez controller (default: 400 + err msg)?
 //TODO: ogarnac logi (dodac + zmienic na debug)
+//todo: powinien usunac adres ale nie person; ogarnac casade typ
+
 @SpringBootApplication
 @EnableConfigurationProperties(JwtConfigProperties.class)
 public class CommerceApplication {

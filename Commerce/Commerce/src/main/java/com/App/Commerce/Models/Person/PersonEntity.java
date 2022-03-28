@@ -3,6 +3,7 @@ package com.App.Commerce.Models.Person;
 
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
+import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Role.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -55,6 +57,8 @@ public class PersonEntity {
     @JoinColumn(name = "FkAddress", referencedColumnName = "id")
     private AddressEntity addressEntity;
 
+    @OneToMany(mappedBy="buyer")
+    private Set<OrderEntity> orders;
 
     public PersonEntity(String firstname, String lastname, LocalDate birthDate, SexEnum sex) {
         this.firstname = firstname;
