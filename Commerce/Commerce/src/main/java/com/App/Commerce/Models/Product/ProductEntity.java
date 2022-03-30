@@ -6,12 +6,16 @@
 
 package com.App.Commerce.Models.Product;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.javamoney.moneta.Money;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -35,7 +39,24 @@ public class ProductEntity {
     @Column(nullable = false, name = "quantity")
     private Integer Quantity;
 
+    @Column(nullable = false, name = "timestamp", updatable = false)
+    @CreationTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
+    private Date timestamp;
+
+    @Column(name = "updated_on")
+    @UpdateTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
+    private Date updatedOn;
+
     @Column(nullable = false, name = "image")
     //todo: how to impl images?
     private String ImgFile;
+
+    public ProductEntity(String name, Money basePricePerUnit, Integer quantity, String imgFile) {
+        this.name = name;
+        this.basePricePerUnit = basePricePerUnit;
+        Quantity = quantity;
+        ImgFile = imgFile;
+    }
 }

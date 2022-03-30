@@ -63,7 +63,7 @@ public class AppUsersController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addUser(@RequestBody final AppUserEntity user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/users/u/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/add").toUriString());
         return ResponseEntity.created(uri).body("User has been added, Id: " + appUserService.addUser(user));
     }
 
@@ -86,7 +86,7 @@ public class AppUsersController {
     @PostMapping("/role/add")
  //   @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addRole(@RequestBody final Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/users/role/save").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/role/save").toUriString());
         return ResponseEntity.created(uri).body("Role has been added, name: " + appUserService.saveRole(role).getName());
     }
     @PostMapping("/role/addtouser")

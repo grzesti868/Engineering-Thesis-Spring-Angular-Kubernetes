@@ -10,13 +10,17 @@ import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import com.App.Commerce.Models.Role.Role;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -33,6 +37,16 @@ public class OrderDetailsEntity {
 
     @Column(nullable = false, name = "product_quantity")
     private Integer productQuantity;
+
+    @Column(nullable = false, name = "timestamp", updatable = false)
+    @CreationTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
+    private Date timestamp;
+
+    @Column(name = "updated_on")
+    @UpdateTimestamp
+    @Setter(value = AccessLevel.PRIVATE)
+    private Date updatedOn;
 
     @OneToOne(targetEntity = ProductEntity.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "FkProduct", referencedColumnName = "id")

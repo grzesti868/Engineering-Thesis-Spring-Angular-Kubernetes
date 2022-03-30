@@ -56,6 +56,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //todo: error not found zwracac w body requesta
         AppUserEntity user = Optional.ofNullable(appUserRepository.findByUsername(username))
                 .orElseThrow(() -> new ApiNotFoundException(String.format("User %s was not found.",username)));
         log.info("User found in the database: {}", username);
