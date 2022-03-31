@@ -31,6 +31,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Long addProduct(ProductEntity product) {
+        log.debug("Fetch product: {}", product.getId());
         validateProductDetails(product);
         return productRepository.save(product).getId();
     }

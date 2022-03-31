@@ -5,6 +5,7 @@ import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Role.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
@@ -59,9 +60,6 @@ public class PersonEntity {
     @JoinColumn(name = "FkAddress", referencedColumnName = "id")
     private AddressEntity addressEntity;
 
-    @OneToMany(mappedBy="buyer")
-    @JsonIgnore
-    private Set<OrderEntity> orders;
 
     public PersonEntity(String firstname, String lastname, LocalDate birthDate, SexEnum sex) {
         this.firstname = firstname;

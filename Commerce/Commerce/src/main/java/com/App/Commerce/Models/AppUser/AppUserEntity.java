@@ -1,8 +1,10 @@
 package com.App.Commerce.Models.AppUser;
 
 import com.App.Commerce.Enums.StatusEnum;
+import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Role.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Getter
 @Setter
@@ -55,6 +55,10 @@ public class AppUserEntity {
     @JoinColumn(name = "FkPerson", referencedColumnName = "id")
     private PersonEntity personEntity;
 
+    @OneToMany(mappedBy="buyer")
+    // @JsonIgnore
+    @JsonBackReference
+    private List<OrderEntity> orders;
 
 
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
