@@ -7,6 +7,7 @@
 package com.App.Commerce.Models.Order;
 
 import com.App.Commerce.Enums.OrderStatusEnum;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import org.hibernate.criterion.Order;
 
@@ -22,10 +23,10 @@ public interface OrderService {
     OrderEntity getOrderById(final Long id);
     void deleteOrderById(final Long id);
     OrderEntity removeProductFromOrder(final Long orderDetailId, final Long orderId);
-    Long addProductToOrder(final ProductEntity product, final Long orderId); //return order id
-/*    void ValidateOrder(final Product Entity); //todo:?
+    Long addProductToOrder(final OrderDetailsEntity orderDetails, final Long orderId); //return order id
+    void ValidateOrder(final OrderEntity order); //todo:?
 
-    ProductEntity getProduct(final Long id);
+    /*ProductEntity getProduct(final Long id);
     ProductEntity getProduct(final String name);
     void validateOrder(final OrderEntity product);
     update(final String name, final ProductEntity updateProduct);

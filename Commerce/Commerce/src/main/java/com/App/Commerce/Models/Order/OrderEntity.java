@@ -31,7 +31,7 @@ import java.util.Set;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderEntity {
 
     @Id
@@ -43,7 +43,7 @@ public class OrderEntity {
     private Integer productQuantity;
 
     @Column(nullable = false, name = "order_status")
-    private OrderStatusEnum orderStatus;
+    private OrderStatusEnum status;
 
     @Column(nullable = false, name = "timestamp", updatable = false)
     @CreationTimestamp
@@ -62,4 +62,10 @@ public class OrderEntity {
 
     @OneToMany(mappedBy="order")
     private Set<OrderDetailsEntity> orderDetails;
+
+    public OrderEntity(Integer productQuantity, OrderStatusEnum status, AppUserEntity buyer) {
+        this.productQuantity = productQuantity;
+        this.status = status;
+        this.buyer = buyer;
+    }
 }

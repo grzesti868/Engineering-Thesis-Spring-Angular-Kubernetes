@@ -14,7 +14,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 //todo: impl debug logów jak w product service
 //todo: test na dodawanie duplikatow itp
 //todo: zamiast get all niech zwraca lista x produktow (stronnicowawnie)
-
+//todo: dodac wiecej rodzajow errorow?
+//todo: zwiekszania/zmniejszenie liczby prodkutu w koszyku zimplementowac w front-end
 @SpringBootApplication
 @EnableConfigurationProperties(JwtConfigProperties.class)
 public class CommerceApplication {

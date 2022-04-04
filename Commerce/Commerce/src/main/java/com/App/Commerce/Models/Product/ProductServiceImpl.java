@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Long addProduct(ProductEntity product) {
-        log.debug("Fetch product: {}", product.getId());
+        log.debug("Adding product: {}", product.getId());
         validateProductDetails(product);
         return productRepository.save(product).getId();
     }
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public void validateProductDetails(ProductEntity product) {
-        log.info("Validating product: {}",product.getName());
+        log.debug("Validating product: {}",product.getName());
 
         Optional.ofNullable(product)
                 .orElseThrow(() -> new ApiRequestException("Product can not be empty."));
@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService{
         Optional.ofNullable(product.getImgFile())
                 .orElseThrow(() -> new ApiRequestException("Image file can not be empty."));
 
-        log.info("Validated successfully!");
+        log.debug("Validated successfully!");
     }
 
     @Override

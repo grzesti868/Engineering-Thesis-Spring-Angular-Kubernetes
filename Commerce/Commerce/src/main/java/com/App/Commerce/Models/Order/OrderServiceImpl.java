@@ -11,6 +11,9 @@ import com.App.Commerce.Exceptions.ApiNotFoundException;
 import com.App.Commerce.Exceptions.ApiRequestException;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.AppUser.AppUserService;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsRepository;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsService;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +34,7 @@ public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
     private final AppUserService  appUserService;
+    private final OrderDetailsService orderDetailsService;
 
     @Override
     public List<OrderEntity> getOrdersByUsername(String username) {
@@ -51,26 +56,55 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<OrderEntity> getAllByStatus(OrderStatusEnum status) {
-        return null;
+        log.debug("Fetching orders by {} status.",status.getCode());
+        return Optional.ofNullable(orderRepository.findAllByStatus(status))
+                .orElseThrow(() -> new ApiNotFoundException(String.format("No orders with {} status", status.getCode())));
     }
 
     @Override
     public OrderEntity getOrderById(Long id) {
-        return null;
+        log.debug("Fetching order by {}.",id);
+        return orderRepository.findById(id)
+                .orElseThrow(()-> new ApiNotFoundException("No order by given id."));
     }
 
     @Override
     public void deleteOrderById(Long id) {
-
+        log.debug("Deleting order {} from database.", id);
+        if (orderRepository.existsById(id))
+            orderRepository.deleteById(id);
+        else
+            throw new ApiNotFoundException(String.format("Order by id: %s does not exists.", id));
     }
+
 
     @Override
     public OrderEntity removeProductFromOrder(Long orderDetailId, Long orderId) {
+        log.debug("Deleting product {} from order {}.", orderDetailId, orderId);
+        if (orderRepository.existsById(orderId)) {
+            try {
+                OrderDetailsEntity orderDetail = orderDetailsService.getOrderDetails(orderDetailId);
+                if(!Objects.equals(orderDetail.getOrder().getId(), orderId)) {
+                    throw new ApiRequestException("Order details does not belong to order!");
+                }
+                orderDetailsService.deleteOrderDetails(orderDetailId);
+            }
+            catch (ApiNotFoundException err) {
+                throw new ApiNotFoundException("Order detail and order does not match!");
+            }
+        } else {
+            throw new ApiNotFoundException(String.format("Order by id: %s does not exists.", orderId));
+        }
+        return orderRepository.findById(orderId).get();
+    }
+    //todo: impl
+    @Override
+    public Long addProductToOrder(OrderDetailsEntity orderDetails, Long orderId) {
         return null;
     }
-
+        //todo: impl
     @Override
-    public Long addProductToOrder(ProductEntity product, Long orderId) {
-        return null;
+    public void ValidateOrder(OrderEntity order) {
+
     }
 }

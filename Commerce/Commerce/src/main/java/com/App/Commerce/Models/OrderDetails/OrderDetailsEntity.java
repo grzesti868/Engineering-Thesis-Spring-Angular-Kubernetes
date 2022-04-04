@@ -53,6 +53,11 @@ public class OrderDetailsEntity {
     private ProductEntity productEntity;
 
     @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "FkPerson", nullable = false)
+    @JoinColumn(name = "FkUser", nullable = false)
     private OrderEntity order;
+
+    public OrderDetailsEntity(Integer productQuantity, ProductEntity productEntity) {
+        this.productQuantity = productQuantity;
+        this.productEntity = productEntity;
+    }
 }

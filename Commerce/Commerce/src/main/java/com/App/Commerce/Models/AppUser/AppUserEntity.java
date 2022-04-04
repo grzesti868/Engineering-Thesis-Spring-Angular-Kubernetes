@@ -1,6 +1,6 @@
 package com.App.Commerce.Models.AppUser;
 
-import com.App.Commerce.Enums.StatusEnum;
+import com.App.Commerce.Enums.UserStatusEnum;
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Role.Role;
@@ -49,7 +49,7 @@ public class AppUserEntity {
     private Date updatedOn;
 
     @Column(nullable = false, name = "status")
-    private StatusEnum status;
+    private UserStatusEnum status;
 
     @OneToOne(targetEntity = PersonEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkPerson", referencedColumnName = "id")
@@ -70,7 +70,7 @@ public class AppUserEntity {
     @JoinColumn(name = "FkPerson", referencedColumnName = "id")
     private Collection<Role> roles= new ArrayList<>();
 
-    public AppUserEntity(String username, String password, String email, StatusEnum status) {
+    public AppUserEntity(String username, String password, String email, UserStatusEnum status) {
         this.username = username;
         this.password = password;
         this.email = email;

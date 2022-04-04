@@ -8,7 +8,7 @@ package com.App.Commerce.Enums;
 
 
 public enum OrderStatusEnum {
-    Male("M"), Female("F"), ;
+    New("New"), Confirmed("Confirmed"), Cancelled("Cancelled"), Pending("Pending") ;
 
     private final String code;
 

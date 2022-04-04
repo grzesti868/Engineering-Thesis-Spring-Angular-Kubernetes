@@ -7,12 +7,10 @@
 package com.App.Commerce.Configs;
 
 import com.App.Commerce.Enums.SexEnum;
-import com.App.Commerce.Enums.StatusEnum;
+import com.App.Commerce.Enums.UserStatusEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
-import com.App.Commerce.Models.AppUser.AppUserRepository;
 import com.App.Commerce.Models.AppUser.AppUserService;
-import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import com.App.Commerce.Models.Product.ProductService;
@@ -27,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Configuration
 public class basicConfiguration {
@@ -40,9 +37,9 @@ public class basicConfiguration {
     @Bean
     CommandLineRunner commandLineRunner(AppUserService appUserService, ProductService productService) {
         return args -> {
-            AppUserEntity user1 = new AppUserEntity("greg1","pass1","email",  StatusEnum.Active);
-            AppUserEntity user2 = new AppUserEntity("greg2","pass2","email2",  StatusEnum.Active);
-            AppUserEntity user3 = new AppUserEntity("greg3","pass3","email23",  StatusEnum.Active);
+            AppUserEntity user1 = new AppUserEntity("greg1","pass1","email",  UserStatusEnum.Active);
+            AppUserEntity user2 = new AppUserEntity("greg2","pass2","email2",  UserStatusEnum.Active);
+            AppUserEntity user3 = new AppUserEntity("greg3","pass3","email23",  UserStatusEnum.Active);
 
             PersonEntity person = new PersonEntity("Grzegorz","Stich", LocalDate.now(), SexEnum.Male);
             PersonEntity person2 = new PersonEntity("Grz22egorz","S22tich", LocalDate.now(), SexEnum.Male);
