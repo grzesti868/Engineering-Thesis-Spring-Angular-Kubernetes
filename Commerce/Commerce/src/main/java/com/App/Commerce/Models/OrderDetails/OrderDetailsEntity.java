@@ -49,11 +49,11 @@ public class OrderDetailsEntity {
     private Date updatedOn;
 
     @OneToOne(targetEntity = ProductEntity.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "FkProduct", referencedColumnName = "id")
+    @JoinColumn(name = "fk_product", referencedColumnName = "id")
     private ProductEntity productEntity;
 
     @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "FkUser", nullable = false)
+    @JoinColumn(name = "fk_order", nullable = false, referencedColumnName = "id")
     private OrderEntity order;
 
     public OrderDetailsEntity(Integer productQuantity, ProductEntity productEntity) {

@@ -12,10 +12,8 @@ import com.App.Commerce.Exceptions.ApiRequestException;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.AppUser.AppUserService;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
-import com.App.Commerce.Models.OrderDetails.OrderDetailsRepository;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsService;
-import com.App.Commerce.Models.Person.PersonEntity;
-import com.App.Commerce.Models.Product.ProductEntity;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -83,11 +81,14 @@ public class OrderServiceImpl implements OrderService{
         log.debug("Deleting product {} from order {}.", orderDetailId, orderId);
         if (orderRepository.existsById(orderId)) {
             try {
+                log.debug("Order found. Removing order details...");
                 OrderDetailsEntity orderDetail = orderDetailsService.getOrderDetails(orderDetailId);
                 if(!Objects.equals(orderDetail.getOrder().getId(), orderId)) {
                     throw new ApiRequestException("Order details does not belong to order!");
                 }
                 orderDetailsService.deleteOrderDetails(orderDetailId);
+                log.debug("Order details removed from order.");
+
             }
             catch (ApiNotFoundException err) {
                 throw new ApiNotFoundException("Order detail and order does not match!");
@@ -95,16 +96,41 @@ public class OrderServiceImpl implements OrderService{
         } else {
             throw new ApiNotFoundException(String.format("Order by id: %s does not exists.", orderId));
         }
+        //todo: na pewno return order?
         return orderRepository.findById(orderId).get();
     }
-    //todo: impl
-    @Override
-    public Long addProductToOrder(OrderDetailsEntity orderDetails, Long orderId) {
-        return null;
-    }
-        //todo: impl
-    @Override
-    public void ValidateOrder(OrderEntity order) {
 
+    @Override
+    public OrderEntity addOrderDetailToOrder(OrderDetailsEntity orderDetails, Long orderId) {
+        log.debug("Adding order detail to order {}", orderId);
+        OrderEntity orderToUpdate = orderRepository.findById(orderId)
+                .orElseThrow(()-> new ApiNotFoundException("Order: "+ orderId +"Not found"));
+        log.debug("Order found! Adding order details...");
+        orderDetailsService.validateOrderDetails(orderDetails);
+
+        Set<OrderDetailsEntity> orderDetailsToUpdate = orderToUpdate.getOrderDetails();
+
+        OrderDetailsEntity orderDetailsDuplicated = orderDetailsToUpdate.stream()
+                .filter(orderDetailsStream -> orderDetails.getProductEntity().equals(orderDetailsStream.getProductEntity()))
+                .findAny()
+                .orElseThrow(() -> new ApiRequestException("Order detail is already in Order!!!"));
+
+        orderDetailsToUpdate.add(orderDetails);
+        log.debug("Order detail added to order!");
+
+        return orderToUpdate;
+    }
+
+
+    @Override
+    public Long createOrderForUser(String username) {
+        log.debug("Creating new order for user {}.",username);
+        AppUserEntity user = appUserService.getUser(username);
+        OrderEntity newOrder = new OrderEntity();
+        user.getOrders().add(newOrder);
+        //todo:?
+        appUserService.update(username, user);
+        log.debug("Order {} has been created.", newOrder.getId());
+        return newOrder.getId();
     }
 }

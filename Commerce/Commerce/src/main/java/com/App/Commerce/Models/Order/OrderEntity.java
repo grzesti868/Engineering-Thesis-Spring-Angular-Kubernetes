@@ -7,6 +7,7 @@
 package com.App.Commerce.Models.Order;
 
 import com.App.Commerce.Enums.OrderStatusEnum;
+import com.App.Commerce.Models.Address.AddressEntity;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
@@ -39,9 +40,6 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_sequence")
     private Long id;
 
-    @Column(nullable = false, name = "product_quantity")
-    private Integer productQuantity;
-
     @Column(nullable = false, name = "order_status")
     private OrderStatusEnum status;
 
@@ -56,15 +54,18 @@ public class OrderEntity {
     private Date updatedOn;
 
     @ManyToOne(targetEntity = AppUserEntity.class)
-    @JoinColumn(name="user_id", nullable=true)
+    @JoinColumn(name="fk_user", nullable=true)
     @JsonManagedReference
     private AppUserEntity buyer;
 
     @OneToMany(mappedBy="order")
     private Set<OrderDetailsEntity> orderDetails;
 
-    public OrderEntity(Integer productQuantity, OrderStatusEnum status, AppUserEntity buyer) {
-        this.productQuantity = productQuantity;
+    @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_address", referencedColumnName = "id")
+    private PersonEntity personEntity;
+
+    public OrderEntity(OrderStatusEnum status, AppUserEntity buyer) {
         this.status = status;
         this.buyer = buyer;
     }

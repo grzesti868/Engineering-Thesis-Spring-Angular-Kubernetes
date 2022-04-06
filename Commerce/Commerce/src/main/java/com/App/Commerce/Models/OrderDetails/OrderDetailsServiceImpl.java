@@ -8,9 +8,6 @@ package com.App.Commerce.Models.OrderDetails;
 
 import com.App.Commerce.Exceptions.ApiNotFoundException;
 import com.App.Commerce.Exceptions.ApiRequestException;
-import com.App.Commerce.Models.AppUser.AppUserEntity;
-import com.App.Commerce.Models.Order.OrderEntity;
-import com.App.Commerce.Models.Product.ProductEntity;
 import com.App.Commerce.Models.Product.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,6 +106,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 
     @Override
     public List<OrderDetailsEntity> getAllByOrder(Long orderId) {
-        return orderDetailsRepository.findOrderDetailsOrderId(orderId);
+        return orderDetailsRepository.findAllByOrderId(orderId);
     }
 }
