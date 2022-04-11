@@ -1,7 +1,6 @@
 package com.App.Commerce.Models.AppUser;
 
-import com.App.Commerce.Models.Role.Role;
-import com.App.Commerce.Models.Role.RoleService;
+import com.App.Commerce.Models.Person.Role.RoleService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

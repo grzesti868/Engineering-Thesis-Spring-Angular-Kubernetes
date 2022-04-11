@@ -1,4 +1,4 @@
-package com.App.Commerce.Models.Role;
+package com.App.Commerce.Models.Person.Role;
 
 
 import lombok.AccessLevel;

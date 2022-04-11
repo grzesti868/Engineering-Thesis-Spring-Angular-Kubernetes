@@ -4,7 +4,7 @@
  * @version 1.0
  */
 
-package com.App.Commerce.Models.Role;
+package com.App.Commerce.Models.Person.Role;
 
 import com.App.Commerce.Exceptions.ApiRequestException;
 import lombok.RequiredArgsConstructor;

@@ -7,9 +7,7 @@
 package com.App.Commerce.Models.OrderDetails;
 
 import com.App.Commerce.Models.Order.OrderEntity;
-import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
-import com.App.Commerce.Models.Role.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +16,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -48,16 +44,16 @@ public class OrderDetailsEntity {
     @Setter(value = AccessLevel.PRIVATE)
     private Date updatedOn;
 
-    @OneToOne(targetEntity = ProductEntity.class, cascade = CascadeType.PERSIST)
+    @ManyToOne(targetEntity = ProductEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_product", referencedColumnName = "id")
-    private ProductEntity productEntity;
+    private ProductEntity product;
 
-    @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.PERSIST)
+    @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_order", nullable = false, referencedColumnName = "id")
     private OrderEntity order;
 
-    public OrderDetailsEntity(Integer productQuantity, ProductEntity productEntity) {
+    public OrderDetailsEntity(Integer productQuantity, ProductEntity product) {
         this.productQuantity = productQuantity;
-        this.productEntity = productEntity;
+        this.product = product;
     }
 }

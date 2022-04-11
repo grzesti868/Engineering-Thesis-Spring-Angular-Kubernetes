@@ -16,6 +16,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 //todo: zamiast get all niech zwraca lista x produktow (stronnicowawnie)
 //todo: dodac wiecej rodzajow errorow?
 //todo: zwiekszania/zmniejszenie liczby prodkutu w koszyku zimplementowac w front-end
+//todo: impl interceptory???
+//todo: kontrolery dla order, order details, products itp -> zwracac tylko potrzebne dane w json (przyklad dla get all users)
+
 @SpringBootApplication
 @EnableConfigurationProperties(JwtConfigProperties.class)
 public class CommerceApplication {

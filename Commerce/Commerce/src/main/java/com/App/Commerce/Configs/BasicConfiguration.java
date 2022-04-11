@@ -6,28 +6,37 @@
 
 package com.App.Commerce.Configs;
 
+import com.App.Commerce.Enums.OrderStatusEnum;
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Enums.UserStatusEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.AppUser.AppUserService;
+import com.App.Commerce.Models.Order.OrderEntity;
+import com.App.Commerce.Models.Order.OrderService;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsService;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import com.App.Commerce.Models.Product.ProductService;
-import com.App.Commerce.Models.Role.Role;
+import com.App.Commerce.Models.Person.Role.Role;
+import lombok.extern.slf4j.Slf4j;
 import org.javamoney.moneta.Money;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.time.LocalDate;
 
 @Configuration
-public class basicConfiguration {
+@Slf4j
+@Transactional
+public class BasicConfiguration {
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -35,7 +44,12 @@ public class basicConfiguration {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(AppUserService appUserService, ProductService productService) {
+    CommandLineRunner commandLineRunner(
+            AppUserService appUserService,
+            ProductService productService,
+            OrderService orderService,
+            OrderDetailsService orderDetailsService
+            ) {
         return args -> {
             AppUserEntity user1 = new AppUserEntity("greg1","pass1","email",  UserStatusEnum.Active);
             AppUserEntity user2 = new AppUserEntity("greg2","pass2","email2",  UserStatusEnum.Active);
@@ -78,8 +92,15 @@ public class basicConfiguration {
             productService.addProduct(product2);
             productService.addProduct(product3);
 
-
-
+            log.debug("...ORDER CREATION...");
+            AddressEntity orderAddress = new AddressEntity("orderAddressStreeet","12a","2","Warszawa","12-345","Polska");
+            OrderEntity orderEntity = new OrderEntity(OrderStatusEnum.New, user3, orderAddress);
+            Long OrderId = orderService.addOrder(orderEntity);
+            OrderDetailsEntity orderDetails = new OrderDetailsEntity(1, product1);
+            OrderDetailsEntity orderDetails2 = new OrderDetailsEntity(1, product2);
+            orderService.addOrderDetailToOrder(orderDetails, OrderId);
+            orderService.addOrderDetailToOrder(orderDetails2, OrderId);
+            log.debug("...ORDER CREATION COMPLETED...");
         };
 
     }

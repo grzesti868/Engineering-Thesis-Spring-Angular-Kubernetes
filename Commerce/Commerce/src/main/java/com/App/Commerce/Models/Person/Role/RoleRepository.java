@@ -1,4 +1,4 @@
-package com.App.Commerce.Models.Role;
+package com.App.Commerce.Models.Person.Role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

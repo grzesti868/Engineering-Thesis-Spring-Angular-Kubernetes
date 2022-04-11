@@ -3,11 +3,9 @@ package com.App.Commerce.Models.Person;
 
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Models.Address.AddressEntity;
+import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.Order.OrderEntity;
-import com.App.Commerce.Models.Role.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -57,8 +55,11 @@ public class PersonEntity {
     private SexEnum sex;
 
     @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "FkAddress", referencedColumnName = "id")
+    @JoinColumn(name = "fk_address", referencedColumnName = "id")
     private AddressEntity addressEntity;
+
+    @OneToOne(mappedBy = "personEntity")
+    private AppUserEntity appUserEntity;
 
 
     public PersonEntity(String firstname, String lastname, LocalDate birthDate, SexEnum sex) {

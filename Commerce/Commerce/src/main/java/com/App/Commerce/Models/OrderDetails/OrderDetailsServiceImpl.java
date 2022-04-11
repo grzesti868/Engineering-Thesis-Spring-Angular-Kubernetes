@@ -56,9 +56,12 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
         OrderDetailsEntity orderDetailToUpdate = orderDetailsRepository.findById(id)
                 .orElseThrow(() -> new ApiNotFoundException("Product to update does not exists"));
 
+        Optional.ofNullable(updateOrderDetails.getOrder())
+                .orElseThrow(() -> new ApiRequestException("Order entity can not be empty."));
+
         validateOrderDetails(updateOrderDetails);
         //todo: zostawic?
-        orderDetailToUpdate.setProductEntity(updateOrderDetails.getProductEntity());
+        orderDetailToUpdate.setProduct(updateOrderDetails.getProduct());
         orderDetailToUpdate.setProductQuantity(updateOrderDetails.getProductQuantity());
         //todo: zostawic?
         orderDetailToUpdate.setOrder(updateOrderDetails.getOrder());
@@ -69,37 +72,33 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
 
     @Override
     public void validateOrderDetails(OrderDetailsEntity orderDetails) {
-        log.debug("Validating order detail: {}",orderDetails.getId());
+        log.debug("Validating order detail...");
 
         Optional.ofNullable(orderDetails)
                 .orElseThrow(() -> new ApiRequestException("Order detail can not be empty."));
 
-        log.debug("Order detail id is {}",orderDetails.getId());
-
-        Optional.ofNullable(orderDetails.getProductEntity())
+        Optional.ofNullable(orderDetails.getProduct())
                 .orElseThrow(() -> new ApiRequestException("Product can not be empty."));
 
 
         try {
-            productService.getProduct(orderDetails.getProductEntity().getId());
+            productService.getProduct(orderDetails.getProduct().getId());
         } catch (ApiNotFoundException err) {
             throw new ApiRequestException(
-                    "Product "+ orderDetails.getProductEntity().getId()+" from order not found in database.");
+                    "Product "+ orderDetails.getProduct().getId()+" from order not found in database.");
         }
 
 
-        log.debug("Order detail id {}",orderDetails.getProductEntity().getId());
+        log.debug("Product id {}",orderDetails.getProduct().getId());
 
         Optional.ofNullable(orderDetails.getProductQuantity())
                 .orElseThrow(() -> new ApiRequestException("Quantity can not be empty."));
 
-        Integer stock = productService.getProduct(orderDetails.getProductEntity().getId()).getQuantity();
+        Integer stock = productService.getProduct(orderDetails.getProduct().getId()).getQuantity();
         //todo: new exepction on how to hanlde empty stocks
         if (stock<orderDetails.getProductQuantity())
             throw new ApiRequestException("Not sufficient amount of product, in stock: "+stock);
 
-        Optional.ofNullable(orderDetails.getOrder())
-                .orElseThrow(() -> new ApiRequestException("Order entity can not be empty."));
 
         log.debug("Order details validated successfully!");
     }

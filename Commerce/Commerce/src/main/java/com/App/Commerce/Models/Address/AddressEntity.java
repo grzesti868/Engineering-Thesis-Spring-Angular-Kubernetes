@@ -2,6 +2,7 @@ package com.App.Commerce.Models.Address;
 
 
 import com.App.Commerce.Enums.SexEnum;
+import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -54,6 +55,9 @@ public class AddressEntity {
     @UpdateTimestamp
     @Setter(value = AccessLevel.PRIVATE)
     private Date updatedOn;
+
+    @OneToOne(mappedBy = "addressEntity", fetch = FetchType.LAZY)
+    private PersonEntity personEntity;
 
     public AddressEntity(String street, String building_num, String apartment_num, String city, String postal_code, String country) {
         this.street = street;

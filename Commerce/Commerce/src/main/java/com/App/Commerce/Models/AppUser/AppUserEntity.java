@@ -3,7 +3,7 @@ package com.App.Commerce.Models.AppUser;
 import com.App.Commerce.Enums.UserStatusEnum;
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
-import com.App.Commerce.Models.Role.Role;
+import com.App.Commerce.Models.Person.Role.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -52,7 +52,8 @@ public class AppUserEntity {
     private UserStatusEnum status;
 
     @OneToOne(targetEntity = PersonEntity.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "FkPerson", referencedColumnName = "id")
+    @JoinColumn(name = "fk_person", referencedColumnName = "id")
+    @JsonBackReference
     private PersonEntity personEntity;
 
     @OneToMany(mappedBy="buyer")

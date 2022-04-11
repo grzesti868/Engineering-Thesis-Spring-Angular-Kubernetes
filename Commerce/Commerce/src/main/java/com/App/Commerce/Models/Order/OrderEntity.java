@@ -54,7 +54,7 @@ public class OrderEntity {
     private Date updatedOn;
 
     @ManyToOne(targetEntity = AppUserEntity.class)
-    @JoinColumn(name="fk_user", nullable=true)
+    @JoinColumn(name="fk_user")
     @JsonManagedReference
     private AppUserEntity buyer;
 
@@ -63,10 +63,12 @@ public class OrderEntity {
 
     @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_address", referencedColumnName = "id")
-    private PersonEntity personEntity;
+    private AddressEntity addressToSent;
 
-    public OrderEntity(OrderStatusEnum status, AppUserEntity buyer) {
+
+    public OrderEntity(OrderStatusEnum status, AppUserEntity buyer, AddressEntity addressToSent) {
         this.status = status;
         this.buyer = buyer;
+        this.addressToSent = addressToSent;
     }
 }

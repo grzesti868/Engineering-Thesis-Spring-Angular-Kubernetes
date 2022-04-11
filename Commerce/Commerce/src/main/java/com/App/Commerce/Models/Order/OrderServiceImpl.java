@@ -19,10 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -104,33 +106,43 @@ public class OrderServiceImpl implements OrderService{
     public OrderEntity addOrderDetailToOrder(OrderDetailsEntity orderDetails, Long orderId) {
         log.debug("Adding order detail to order {}", orderId);
         OrderEntity orderToUpdate = orderRepository.findById(orderId)
-                .orElseThrow(()-> new ApiNotFoundException("Order: "+ orderId +"Not found"));
+                .orElseThrow(()-> new ApiNotFoundException("Order: "+ orderId +" not found."));
         log.debug("Order found! Adding order details...");
         orderDetailsService.validateOrderDetails(orderDetails);
 
+
         Set<OrderDetailsEntity> orderDetailsToUpdate = orderToUpdate.getOrderDetails();
-
-        OrderDetailsEntity orderDetailsDuplicated = orderDetailsToUpdate.stream()
-                .filter(orderDetailsStream -> orderDetails.getProductEntity().equals(orderDetailsStream.getProductEntity()))
-                .findAny()
-                .orElseThrow(() -> new ApiRequestException("Order detail is already in Order!!!"));
-
+        orderDetailsToUpdate.forEach(order -> {
+            if(order.getProduct().getId().equals(orderDetails.getProduct().getId())){
+                throw new ApiRequestException("Product already in order!!!");
+            }
+        } );
+        orderDetails.setOrder(orderToUpdate);
         orderDetailsToUpdate.add(orderDetails);
-        log.debug("Order detail added to order!");
+        Long id = orderDetailsService.createOrderDetails(orderDetails);
+        orderToUpdate.setOrderDetails(orderDetailsToUpdate);
 
-        return orderToUpdate;
+        return orderRepository.save(orderToUpdate);
     }
+/*        log.info("Saving new user {} to database", user.getUsername() );
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        log.info("User's password encoded: {}.", user.getPassword());
 
+        if (appUserRepository.existsByUsername(user.getUsername()))
+                throw new ApiRequestException("Username already exists.");
 
+        if (appUserRepository.existsByEmail(user.getEmail()))
+                throw new ApiRequestException("User's email already taken");
+
+    validateUserDetails(user);
+
+        personService.validatePersonDetails(user.getPersonEntity());
+
+        return appUserRepository.save(user).getId();*/
+    //todo: impl secure
     @Override
-    public Long createOrderForUser(String username) {
-        log.debug("Creating new order for user {}.",username);
-        AppUserEntity user = appUserService.getUser(username);
-        OrderEntity newOrder = new OrderEntity();
-        user.getOrders().add(newOrder);
-        //todo:?
-        appUserService.update(username, user);
-        log.debug("Order {} has been created.", newOrder.getId());
-        return newOrder.getId();
+    public Long addOrder(OrderEntity order) {
+        log.debug("Adding new order for user {}.",order.getBuyer().getUsername());
+        return orderRepository.save(order).getId();
     }
 }

@@ -6,9 +6,9 @@ import com.App.Commerce.Exceptions.ApiRequestException;
 import com.App.Commerce.Filter.CustomAlgorithmImpl;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Person.PersonService;
-import com.App.Commerce.Models.Role.Role;
-import com.App.Commerce.Models.Role.RoleRepository;
-import com.App.Commerce.Models.Role.RoleService;
+import com.App.Commerce.Models.Person.Role.Role;
+import com.App.Commerce.Models.Person.Role.RoleRepository;
+import com.App.Commerce.Models.Person.Role.RoleService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -139,6 +139,13 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
         log.info("Saving new user {} to database", user.getUsername() );
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("User's password encoded: {}.", user.getPassword());
+
+        if (appUserRepository.existsByUsername(user.getUsername()))
+            throw new ApiRequestException("Username already exists.");
+
+        if (appUserRepository.existsByEmail(user.getEmail()))
+            throw new ApiRequestException("User's email already taken");
+
         validateUserDetails(user);
 
         personService.validatePersonDetails(user.getPersonEntity());
@@ -166,12 +173,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
         Optional.ofNullable(user.getUsername())
                 .orElseThrow(() -> new ApiRequestException("Username can not be empty."));
 
-        if (appUserRepository.existsByUsername(user.getUsername()))
-            throw new ApiRequestException("Username already exists.");
-
-        if (appUserRepository.existsByEmail(user.getEmail()))
-            throw new ApiRequestException("User's email already taken");
-
 
         Optional.ofNullable(user.getPassword())
                 .orElseThrow(() -> new ApiRequestException("Password can not be empty."));
@@ -198,6 +199,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService{
         userToUpdate.setUsername(updateUser.getUsername());
         userToUpdate.setPassword(updateUser.getPassword());
         userToUpdate.setStatus(updateUser.getStatus());
+        userToUpdate.setOrders(updateUser.getOrders());
 
         PersonEntity updatePerson = Optional.ofNullable(updateUser.getPersonEntity())
                 .orElseThrow(() -> new ApiNotFoundException("Person's details can not be empty."));

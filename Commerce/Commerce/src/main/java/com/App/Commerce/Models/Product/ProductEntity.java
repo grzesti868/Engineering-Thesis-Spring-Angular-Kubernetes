@@ -6,6 +6,7 @@
 
 package com.App.Commerce.Models.Product;
 
+import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ import org.javamoney.moneta.Money;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -52,6 +55,9 @@ public class ProductEntity {
     @Column(nullable = false, name = "image")
     //todo: how to impl images?
     private String ImgFile;
+
+    @OneToMany(mappedBy="product", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<OrderDetailsEntity> orderDetails;
 
     public ProductEntity(String name, Money basePricePerUnit, Integer quantity, String imgFile) {
         this.name = name;
