@@ -8,6 +8,7 @@ package com.App.Commerce.Models.Product;
 
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,8 +31,6 @@ public class ProductController {
     }
 
     @GetMapping("{productname}")
-    //todo: test
-    // @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.name")
     public ResponseEntity<ProductEntity> getProductByName(@PathVariable final String productname) {
         return ResponseEntity.ok().body(productService.getProduct(productname));
     }
@@ -39,7 +38,7 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseEntity<String> addProduct(@RequestBody final ProductEntity product) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/add").toUriString());
-        return ResponseEntity.created(uri).body("User has been added, Id: " + productService.addProduct(product));
+        return ResponseEntity.created(uri).body("Product has been added, Id: " + productService.addProduct(product));
     }
 
     @PutMapping("{productname}")
@@ -50,7 +49,6 @@ public class ProductController {
     }
 
     @DeleteMapping("{productname}")
-    //  @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.name")
     public ResponseEntity<String> deleteProductByProductName(@PathVariable("productname") final String productname){
         productService.deleteByName(productname);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/add").toUriString());

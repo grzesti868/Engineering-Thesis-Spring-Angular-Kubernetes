@@ -32,12 +32,15 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Long addProduct(ProductEntity product) {
         log.debug("Adding product: {}", product.getId());
+        if (productRepository.existsByName(product.getName()))
+            throw new ApiRequestException("Product already exists.");
         validateProductDetails(product);
         return productRepository.save(product).getId();
     }
 
     @Override
     public ProductEntity update(String name, ProductEntity updateProduct) {
+        log.debug("Updating product {}...", name);
         ProductEntity productToUpdate = productRepository.findByName(name)
                 .orElseThrow(() -> new ApiNotFoundException("Product to update does not exists"));
 
@@ -73,19 +76,14 @@ public class ProductServiceImpl implements ProductService{
         Optional.ofNullable(product)
                 .orElseThrow(() -> new ApiRequestException("Product can not be empty."));
 
-        log.debug("Product is not null {}",product.getClass());
-
         Optional.ofNullable(product.getName())
                 .orElseThrow(() -> new ApiRequestException("Name can not be empty."));
-
-        if (productRepository.existsByName(product.getName()))
-            throw new ApiRequestException("Product already exists.");
 
         Optional.ofNullable(product.getQuantity())
                 .orElseThrow(() -> new ApiRequestException("Quantity can not be empty."));
 
         Optional.ofNullable(product.getBasePricePerUnit())
-                .orElseThrow(() -> new ApiRequestException("Base price pre unit can not be empty."));
+                .orElseThrow(() -> new ApiRequestException("Base price per unit can not be empty."));
 
         Optional.ofNullable(product.getImgFile())
                 .orElseThrow(() -> new ApiRequestException("Image file can not be empty."));

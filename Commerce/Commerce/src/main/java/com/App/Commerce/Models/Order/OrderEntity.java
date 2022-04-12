@@ -55,7 +55,7 @@ public class OrderEntity {
 
     @ManyToOne(targetEntity = AppUserEntity.class)
     @JoinColumn(name="fk_user")
-    @JsonManagedReference
+    @JsonBackReference(value = "user-order")
     private AppUserEntity buyer;
 
     @OneToMany(mappedBy="order")

@@ -1,7 +1,7 @@
 package com.App.Commerce.Models.AppUser;
 
 
-import com.App.Commerce.Models.Person.Role.Role;
+import com.App.Commerce.Models.Role.Role;
 import com.App.Commerce.Models.RoleToUserForm.RoleToUserForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

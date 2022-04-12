@@ -3,8 +3,9 @@ package com.App.Commerce.Models.AppUser;
 import com.App.Commerce.Enums.UserStatusEnum;
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
-import com.App.Commerce.Models.Person.Role.Role;
+import com.App.Commerce.Models.Role.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,12 +54,12 @@ public class AppUserEntity {
 
     @OneToOne(targetEntity = PersonEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_person", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "user-person")
     private PersonEntity personEntity;
 
     @OneToMany(mappedBy="buyer")
     // @JsonIgnore
-    @JsonBackReference
+    @JsonManagedReference(value = "user-order")
     private List<OrderEntity> orders;
 
 

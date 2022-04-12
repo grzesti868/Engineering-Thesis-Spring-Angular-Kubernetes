@@ -4,7 +4,7 @@
  * @version 1.0
  */
 
-package com.App.Commerce.Models.Person.Role;
+package com.App.Commerce.Models.Role;
 
 public interface RoleService {
     Role saveRole(final Role role);

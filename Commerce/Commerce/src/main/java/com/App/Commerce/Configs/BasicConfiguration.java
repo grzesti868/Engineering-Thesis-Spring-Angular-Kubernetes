@@ -19,7 +19,7 @@ import com.App.Commerce.Models.OrderDetails.OrderDetailsService;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import com.App.Commerce.Models.Product.ProductService;
-import com.App.Commerce.Models.Person.Role.Role;
+import com.App.Commerce.Models.Role.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.javamoney.moneta.Money;
 import org.springframework.boot.CommandLineRunner;
@@ -81,12 +81,12 @@ public class BasicConfiguration {
             appUserService.addRoleToUser(user2.getUsername(),"ROLE_MANAGER");
             appUserService.addRoleToUser(user1.getUsername(),"ROLE_ADMIN");
 
-            CurrencyUnit usd = Monetary.getCurrency("PLN");
-            Money moneyof = Money.of(12, usd);
+            CurrencyUnit pln = Monetary.getCurrency("PLN");
+            Money moneyOf = Money.of(12, pln);
 
-            ProductEntity product1 = new ProductEntity("produkt1",moneyof,10, "imgFile");
-            ProductEntity product2 = new ProductEntity("produkt2",moneyof,102, "imgFile1");
-            ProductEntity product3 = new ProductEntity("produkt3",moneyof,103, "imgFile2");
+            ProductEntity product1 = new ProductEntity("produkt1",moneyOf,10, "imgFile");
+            ProductEntity product2 = new ProductEntity("produkt2",moneyOf,102, "imgFile1");
+            ProductEntity product3 = new ProductEntity("produkt3",moneyOf,103, "imgFile2");
 
             productService.addProduct(product1);
             productService.addProduct(product2);
@@ -100,6 +100,7 @@ public class BasicConfiguration {
             OrderDetailsEntity orderDetails2 = new OrderDetailsEntity(1, product2);
             orderService.addOrderDetailToOrder(orderDetails, OrderId);
             orderService.addOrderDetailToOrder(orderDetails2, OrderId);
+
             log.debug("...ORDER CREATION COMPLETED...");
         };
 
