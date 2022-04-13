@@ -51,7 +51,7 @@ public class ProductController {
     @DeleteMapping("{productname}")
     public ResponseEntity<String> deleteProductByProductName(@PathVariable("productname") final String productname){
         productService.deleteByName(productname);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/add").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/products/{productname}").toUriString());
         return ResponseEntity.ok().body("Product "+productname+" has been deleted.");
     }
 

@@ -16,6 +16,7 @@ public interface OrderDetailsService {
     OrderDetailsEntity getOrderDetails(final Long id);
     Long createOrderDetails(final OrderDetailsEntity orderDetails);
     void deleteOrderDetails(final Long id);
+    //no usage
     OrderDetailsEntity update(final Long id, final OrderDetailsEntity updateOrderDetails);
     void validateOrderDetails(final OrderDetailsEntity orderDetails);
     List<OrderDetailsEntity> getAllByOrder(final Long orderId);

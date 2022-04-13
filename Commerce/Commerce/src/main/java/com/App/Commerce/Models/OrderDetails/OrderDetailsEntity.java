@@ -8,6 +8,10 @@ package com.App.Commerce.Models.OrderDetails;
 
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,10 +50,16 @@ public class OrderDetailsEntity {
 
     @ManyToOne(targetEntity = ProductEntity.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_product", referencedColumnName = "id")
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="name")
+    @JsonIdentityReference(alwaysAsId=true)
+    @JsonDeserialize(using = OrderDetailsProductDeserializerImpl.class)
     private ProductEntity product;
 
     @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_order", nullable = false, referencedColumnName = "id")
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIdentityReference(alwaysAsId=true)
+    @JsonDeserialize(using = OrderDetailsOrderDeserializerImpl.class)
     private OrderEntity order;
 
     public OrderDetailsEntity(Integer productQuantity, ProductEntity product) {

@@ -121,7 +121,6 @@ public class OrderServiceImpl implements OrderService{
         orderDetailsToUpdate.add(orderDetails);
         Long id = orderDetailsService.createOrderDetails(orderDetails);
         orderToUpdate.setOrderDetails(orderDetailsToUpdate);
-
         return orderRepository.save(orderToUpdate);
     }
 /*        log.info("Saving new user {} to database", user.getUsername() );
@@ -144,5 +143,17 @@ public class OrderServiceImpl implements OrderService{
     public Long addOrder(OrderEntity order) {
         log.debug("Adding new order for user {}.",order.getBuyer().getUsername());
         return orderRepository.save(order).getId();
+    }
+
+    @Override
+    public Long newOrderForUser(String username) {
+        AppUserEntity user = appUserService.getUser(username);
+        OrderEntity order = new OrderEntity(OrderStatusEnum.New, user, user.getPersonEntity().getAddressEntity());
+        return addOrder(order);
+    }
+
+    @Override
+    public Long update(String orderId, OrderEntity order) {
+        return null;
     }
 }

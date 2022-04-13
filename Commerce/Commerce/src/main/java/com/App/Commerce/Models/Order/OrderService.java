@@ -26,6 +26,8 @@ public interface OrderService {
     OrderEntity removeProductFromOrder(final Long orderDetailId, final Long orderId);
     OrderEntity addOrderDetailToOrder(final OrderDetailsEntity orderDetails, final Long orderId); //return order id
     Long addOrder(final OrderEntity orderEntity);
+    Long newOrderForUser(final String username);
+    Long update(final String orderId,final OrderEntity order);
 
 
     /*
