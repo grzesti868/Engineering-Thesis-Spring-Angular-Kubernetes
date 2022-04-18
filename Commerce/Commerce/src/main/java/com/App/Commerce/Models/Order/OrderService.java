@@ -23,11 +23,13 @@ public interface OrderService {
     List<OrderEntity> getAllByStatus(OrderStatusEnum status);
     OrderEntity getOrderById(final Long id);
     void deleteOrderById(final Long id);
-    OrderEntity removeProductFromOrder(final Long orderDetailId, final Long orderId);
+    void removeProductFromOrder(final Long orderDetailId, final Long orderId);
     OrderEntity addOrderDetailToOrder(final OrderDetailsEntity orderDetails, final Long orderId); //return order id
     Long addOrder(final OrderEntity orderEntity);
     Long newOrderForUser(final String username);
-    Long update(final String orderId,final OrderEntity order);
+    Long update(final Long orderId,final OrderEntity order);
+
+    void validateOrder(final OrderEntity order);
 
 
     /*

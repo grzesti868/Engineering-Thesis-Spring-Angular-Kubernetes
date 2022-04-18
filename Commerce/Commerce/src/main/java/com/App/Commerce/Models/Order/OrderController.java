@@ -7,6 +7,7 @@
 package com.App.Commerce.Models.Order;
 
 import com.App.Commerce.Enums.OrderStatusEnum;
+import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.criterion.Order;
@@ -39,6 +40,8 @@ public class OrderController {
     //todo: test
     @GetMapping("/status/{orderStatusEnum}")
     public ResponseEntity<List<OrderEntity>> getOrdersByStatus(@PathVariable final OrderStatusEnum orderStatusEnum) {
+        System.out.println("TEST");
+
         return ResponseEntity.ok().body(orderService.getAllByStatus(orderStatusEnum));
     }
 
@@ -62,20 +65,32 @@ public class OrderController {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/orders/{orderId}/{OrderDetailsId}").toUriString());
         return ResponseEntity.ok().body("Order details "+ orderDetailsId + " from order "+ orderDetailsId +" has been deleted.");
     }
+
+
+
     @PostMapping("/{username}/new")
     public ResponseEntity<String> createNewOrderForUser(@PathVariable final String username) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/orders/{username}/new}").toUriString());
         return ResponseEntity.created(uri).body("New Order has been created for user: "+ orderService.newOrderForUser(username));
     }
 
-    //updateOrder();
-    //TODO: HERE, jak zaimplementowac update koszyka?
     @PutMapping("/update/{orderId}")
     public ResponseEntity<String> updateOrder(
-            @PathVariable final String orderId,
+            @PathVariable final Long orderId,
             @RequestBody final OrderEntity order) {
         return ResponseEntity.ok("Order " + orderId + "has been updated, id: " + orderService.update(orderId, order));
     }
+
+    @PutMapping("/add/{orderId}")
+    public ResponseEntity<String> addOrderDetailsToOrder(
+            @PathVariable final Long orderId,
+            @RequestBody final OrderDetailsEntity order) {
+        return ResponseEntity.ok("Order " + orderId + " has been updated, id: " + orderService.addOrderDetailToOrder(order, orderId).getId());
+    }
+
+
+
+
 
     /* OrderEntity addOrderDetailToOrder(final OrderDetailsEntity orderDetails, final Long orderId); //return order id
     Long addOrder(final OrderEntity orderEntity);

@@ -4,6 +4,9 @@ package com.App.Commerce.Models.Address;
 import com.App.Commerce.Enums.SexEnum;
 import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +60,8 @@ public class AddressEntity {
     private Date updatedOn;
 
     @OneToOne(mappedBy = "addressEntity", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIdentityReference(alwaysAsId=true)
     private PersonEntity personEntity;
 
     public AddressEntity(String street, String building_num, String apartment_num, String city, String postal_code, String country) {

@@ -14,6 +14,7 @@ import com.App.Commerce.Models.AppUser.AppUserService;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsService;
 
+import com.App.Commerce.Models.Product.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,8 +80,8 @@ public class OrderServiceImpl implements OrderService{
 
 
     @Override
-    public OrderEntity removeProductFromOrder(Long orderDetailId, Long orderId) {
-        log.debug("Deleting product {} from order {}.", orderDetailId, orderId);
+    public void removeProductFromOrder(Long orderDetailId, Long orderId) {
+        log.debug("Deleting order detail {} from order {}.", orderDetailId, orderId);
         if (orderRepository.existsById(orderId)) {
             try {
                 log.debug("Order found. Removing order details...");
@@ -93,13 +94,12 @@ public class OrderServiceImpl implements OrderService{
 
             }
             catch (ApiNotFoundException err) {
-                throw new ApiNotFoundException("Order detail and order does not match!");
+                throw new ApiNotFoundException("Order does not contain "+ orderDetailId +" order details");
             }
         } else {
             throw new ApiNotFoundException(String.format("Order by id: %s does not exists.", orderId));
         }
-        //todo: na pewno return order?
-        return orderRepository.findById(orderId).get();
+
     }
 
     @Override
@@ -153,7 +153,37 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Long update(String orderId, OrderEntity order) {
-        return null;
+    public Long update(Long orderId, OrderEntity updateOrder) {
+        log.debug("Updating order {}...", orderId);
+        OrderEntity orderToUpdate = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ApiNotFoundException("Order to update does not exists."));
+
+        if(orderToUpdate.getBuyer() != updateOrder.getBuyer() )
+            throw new ApiRequestException("Order to update need to have the same buyer!");
+
+        validateOrder(updateOrder);
+
+        orderToUpdate.getOrderDetails()
+                .forEach(orderDetailsService::validateOrderDetails);
+        orderToUpdate.setOrderDetails(updateOrder.getOrderDetails());
+        orderToUpdate.setAddressToSent(updateOrder.getAddressToSent());
+        orderToUpdate.setStatus(updateOrder.getStatus());
+
+        return orderRepository.save(orderToUpdate).getId();
+    }
+
+    @Override
+    public void validateOrder(OrderEntity order) {
+        log.debug("Validating order: {}",order.getId());
+
+        Optional.ofNullable(order.getBuyer())
+                .orElseThrow(() -> new ApiRequestException("Buyer can not be empty."));
+
+        Optional.ofNullable(order.getAddressToSent())
+                .orElseThrow(() -> new ApiRequestException("Address to sent not be empty."));
+
+        Optional.ofNullable(order.getStatus())
+                .orElseThrow(() -> new ApiRequestException("Order status can not be empty."));
+        log.debug("Validated successfully!");
     }
 }

@@ -55,7 +55,7 @@ public class OrderDetailsEntity {
     @JsonDeserialize(using = OrderDetailsProductDeserializerImpl.class)
     private ProductEntity product;
 
-    @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = OrderEntity.class, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_order", nullable = false, referencedColumnName = "id")
     @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)

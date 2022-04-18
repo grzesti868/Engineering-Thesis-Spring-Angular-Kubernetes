@@ -58,7 +58,7 @@ public class OrderEntity {
     @JsonBackReference(value = "user-order")
     private AppUserEntity buyer;
 
-    @OneToMany(mappedBy="order")
+    @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
     private Set<OrderDetailsEntity> orderDetails;
 
     @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)
