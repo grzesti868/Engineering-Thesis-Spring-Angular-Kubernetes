@@ -24,7 +24,6 @@ public class OrderDetailsController {
 
     private final OrderDetailsService orderDetailsService;
 
-    //todo: test (repo dziala?)
     @GetMapping("/by/order/{orderId}")
     public ResponseEntity<List<OrderDetailsEntity>> listAllOrderDetailsByOrder(@PathVariable final Long orderId) {
         final List<OrderDetailsEntity> orderDetailsList = orderDetailsService.getAllByOrder(orderId);

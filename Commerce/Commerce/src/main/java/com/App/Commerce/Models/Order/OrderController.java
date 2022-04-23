@@ -37,7 +37,6 @@ public class OrderController {
         return ResponseEntity.ok().body(orderService.getOrdersByUsername(username));
     }
 
-    //todo: test
     @GetMapping("/status/{orderStatusEnum}")
     public ResponseEntity<List<OrderEntity>> getOrdersByStatus(@PathVariable final OrderStatusEnum orderStatusEnum) {
         System.out.println("TEST");

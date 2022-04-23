@@ -138,7 +138,6 @@ public class OrderServiceImpl implements OrderService{
         personService.validatePersonDetails(user.getPersonEntity());
 
         return appUserRepository.save(user).getId();*/
-    //todo: impl secure
     @Override
     public Long addOrder(OrderEntity order) {
         log.debug("Adding new order for user {}.",order.getBuyer().getUsername());

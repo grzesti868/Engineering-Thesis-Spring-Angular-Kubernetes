@@ -30,7 +30,6 @@ public class AppUsersController {
     }
 
     @GetMapping("{username}")
-    //todo: przetestowac
    // @PreAuthorize("hasRole('ROLE_ADMIN') or #username == authentication.name")
     public ResponseEntity<AppUserEntity> getUserByName(@PathVariable final String username) {
         return ResponseEntity.ok().body(appUserService.getUser(username));

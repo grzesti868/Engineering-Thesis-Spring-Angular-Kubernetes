@@ -19,7 +19,7 @@ import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
 
-@JsonComponent
+//@JsonComponent
 @Slf4j
 @AllArgsConstructor
 public class OrderDetailsProductDeserializerImpl extends JsonDeserializer<ProductEntity> {
@@ -31,7 +31,7 @@ public class OrderDetailsProductDeserializerImpl extends JsonDeserializer<Produc
             JsonParser jsonParser,
             DeserializationContext deserializationContext)
             throws IOException, JacksonException {
-            log.debug("Deserializable of Product Entity: {}", jsonParser.getText());
+            log.debug("Deserializable of Product Entity: {} {}", jsonParser.getText(), jsonParser.getTextLength());
             return productService.getProduct(jsonParser.getText());
     }
 }

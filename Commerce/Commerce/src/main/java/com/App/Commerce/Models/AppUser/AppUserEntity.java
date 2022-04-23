@@ -5,7 +5,9 @@ import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Role.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,10 +58,10 @@ public class AppUserEntity {
     @JoinColumn(name = "fk_person", referencedColumnName = "id")
     @JsonBackReference(value = "user-person")
     private PersonEntity personEntity;
-
     @OneToMany(mappedBy="buyer")
     // @JsonIgnore
-    @JsonManagedReference(value = "user-order")
+   //@JsonManagedReference(value = "user-order")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
     private List<OrderEntity> orders;
 
 

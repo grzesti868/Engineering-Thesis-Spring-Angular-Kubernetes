@@ -8,6 +8,7 @@ package com.App.Commerce.Models.OrderDetails;
 
 import com.App.Commerce.Models.Order.OrderEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -59,6 +60,7 @@ public class OrderDetailsEntity {
     @JoinColumn(name = "fk_order", nullable = false, referencedColumnName = "id")
     @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
+//    @JsonBackReference(value = "order-details")
     @JsonDeserialize(using = OrderDetailsOrderDeserializerImpl.class)
     private OrderEntity order;
 

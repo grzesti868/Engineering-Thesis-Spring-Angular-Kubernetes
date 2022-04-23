@@ -60,10 +60,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
                 .orElseThrow(() -> new ApiRequestException("Order entity can not be empty."));
 
         validateOrderDetails(updateOrderDetails);
-        //todo: zostawic?
         orderDetailToUpdate.setProduct(updateOrderDetails.getProduct());
         orderDetailToUpdate.setProductQuantity(updateOrderDetails.getProductQuantity());
-        //todo: zostawic?
         orderDetailToUpdate.setOrder(updateOrderDetails.getOrder());
 
         return orderDetailsRepository.save(orderDetailToUpdate);
@@ -95,7 +93,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
                 .orElseThrow(() -> new ApiRequestException("Quantity can not be empty."));
 
         Integer stock = productService.getProduct(orderDetails.getProduct().getId()).getQuantity();
-        //todo: new exepction on how to hanlde empty stocks
         if (stock<orderDetails.getProductQuantity())
             throw new ApiRequestException("Not sufficient amount of product, in stock: "+stock);
 

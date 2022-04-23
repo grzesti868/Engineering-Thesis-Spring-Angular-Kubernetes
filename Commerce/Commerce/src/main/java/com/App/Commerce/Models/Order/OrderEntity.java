@@ -12,10 +12,7 @@ import com.App.Commerce.Models.AppUser.AppUserEntity;
 import com.App.Commerce.Models.OrderDetails.OrderDetailsEntity;
 import com.App.Commerce.Models.Person.PersonEntity;
 import com.App.Commerce.Models.Product.ProductEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,10 +52,12 @@ public class OrderEntity {
 
     @ManyToOne(targetEntity = AppUserEntity.class)
     @JoinColumn(name="fk_user")
-    @JsonBackReference(value = "user-order")
+    //@JsonBackReference(value = "user-order")
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
     private AppUserEntity buyer;
 
     @OneToMany(mappedBy="order", cascade = CascadeType.ALL)
+   // @JsonManagedReference(value = "order-details")
     private Set<OrderDetailsEntity> orderDetails;
 
     @OneToOne(targetEntity = AddressEntity.class, cascade = CascadeType.ALL)

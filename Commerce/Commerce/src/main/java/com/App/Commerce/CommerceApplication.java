@@ -17,7 +17,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 //todo: dodac wiecej rodzajow errorow?
 //todo: zwiekszania/zmniejszenie liczby prodkutu w koszyku zimplementowac w front-end
 //todo: impl interceptory???
-//todo: kontrolery dla order, order details, products itp -> zwracac tylko potrzebne dane w json (przyklad dla get all users)
 //todo: make all ids unique (np order i order details moga miec takie samo id!)
 @SpringBootApplication
 @EnableConfigurationProperties(JwtConfigProperties.class)

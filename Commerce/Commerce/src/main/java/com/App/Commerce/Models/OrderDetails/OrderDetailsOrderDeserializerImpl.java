@@ -29,7 +29,7 @@ public class OrderDetailsOrderDeserializerImpl extends JsonDeserializer<OrderEnt
     public OrderEntity deserialize(JsonParser jsonParser,
                                    DeserializationContext deserializationContext)
             throws IOException, JacksonException {
-        log.debug("Deserializable of Product Entity: {}", jsonParser.getText());
+        log.debug("Deserializable of Order  Entity: {}", jsonParser.getText());
         return orderService.getOrderById(jsonParser.getValueAsLong());
     }
 }
