@@ -41,10 +41,10 @@ public class AppUserEntity {
     @Column(nullable = false, name = "email")
     private String email;
 
-    @Column(nullable = false, name = "timestamp", updatable = false)
+    @Column(nullable = false, name = "created_at", updatable = false)
     @CreationTimestamp
     @Setter(value = AccessLevel.PRIVATE)
-    private Date timestamp;
+    private Date created;
 
     @Column(name = "updated_on")
     @UpdateTimestamp

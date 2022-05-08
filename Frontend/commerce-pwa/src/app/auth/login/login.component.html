@@ -1,1 +1,35 @@
-<p>login works!</p>
+<mat-grid-list cols="1" rowHeight="5em">
+    <form (ngSubmit)="onSubmit()" #form="ngForm"> 
+        <div>
+            <mat-grid-tile>
+                <mat-form-field appearance="fill">
+                    <mat-label>Login</mat-label>
+                    <input matInput placeholder="Nazwa użytkownika" [(ngModel)]="login.login" name="login" required>
+                
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Podaj hasło</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'"  [(ngModel)]="login.password" name="password" required>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <button mat-raised-button color="primary" type="submit" value="Zaloguj" [disabled]="form.invalid">
+                    Zaloguj 
+                </button>
+            </mat-grid-tile>
+                
+
+        </div>
+    </form>
+    <mat-grid-tile>
+        <mat-error > 
+            {{err}}
+        </mat-error>
+    </mat-grid-tile>
+</mat-grid-list>

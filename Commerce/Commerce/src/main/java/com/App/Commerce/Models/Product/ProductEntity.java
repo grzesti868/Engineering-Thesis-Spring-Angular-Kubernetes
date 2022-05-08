@@ -47,10 +47,10 @@ public class ProductEntity {
     @Column(nullable = false, name = "quantity")
     private Integer quantity;
 
-    @Column(nullable = false, name = "timestamp", updatable = false)
+    @Column(nullable = false, name = "created_at", updatable = false)
     @CreationTimestamp
     @Setter(value = AccessLevel.PRIVATE)
-    private Date timestamp;
+    private Date createdAt;
 
     @Column(name = "updated_on")
     @UpdateTimestamp

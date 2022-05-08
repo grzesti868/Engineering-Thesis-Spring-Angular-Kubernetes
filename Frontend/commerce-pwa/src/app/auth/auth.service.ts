@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { catchError, ConnectableObservable, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { Login } from './login';
 import { LoginRes } from './login-res';
 

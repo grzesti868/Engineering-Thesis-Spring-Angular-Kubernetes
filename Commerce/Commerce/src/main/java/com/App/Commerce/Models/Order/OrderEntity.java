@@ -40,10 +40,10 @@ public class OrderEntity {
     @Column(nullable = false, name = "order_status")
     private OrderStatusEnum status;
 
-    @Column(nullable = false, name = "timestamp", updatable = false)
+    @Column(nullable = false, name = "created_at", updatable = false)
     @CreationTimestamp
     @Setter(value = AccessLevel.PRIVATE)
-    private Date timestamp;
+    private Date createdAt;
 
     @Column(name = "updated_on")
     @UpdateTimestamp
