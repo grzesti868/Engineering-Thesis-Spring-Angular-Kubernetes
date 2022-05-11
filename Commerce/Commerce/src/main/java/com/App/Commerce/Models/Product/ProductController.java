@@ -30,9 +30,9 @@ public class ProductController {
         return ResponseEntity.ok().body(productList);
     }
 
-    @GetMapping("{productname}")
-    public ResponseEntity<ProductEntity> getProductByName(@PathVariable final String productname) {
-        return ResponseEntity.ok().body(productService.getProduct(productname));
+    @GetMapping("{productId}")
+    public ResponseEntity<ProductEntity> getProductByName(@PathVariable final Long productId) {
+        return ResponseEntity.ok().body(productService.getProduct(productId));
     }
 
     @PostMapping("/add")

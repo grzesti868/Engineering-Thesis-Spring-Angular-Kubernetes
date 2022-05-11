@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start-pwa": "http-server -p 4080 -c-1 dist/angular-pwa"
+
   },
   "private": true,
   "dependencies": {

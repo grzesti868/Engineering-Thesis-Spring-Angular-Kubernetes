@@ -1,13 +1,21 @@
-<mat-grid-list cols="2" rowHeight="3em">
-  <mat-grid-tile>
-      <div appZmianaKoloru>
-          <mat-icon aria-hidden="false" aria-label="Example home icon"> work </mat-icon>
-          Grzegorz Stich - Aplikacja biznesowa
+<mat-toolbar color="primary">
+    <app-menu></app-menu>
+    <mat-icon> work </mat-icon>
+    <a routerLink="">
+       
+        <div class="title"> Grzegorz Stich - Aplikacja biznesowa </div>
+    </a>
+    <span class="example-spacer"></span>
+
+    <a routerLink="logowanie">
+        <button mat-raised-button class="logBtn" color="primary">
+            Logowanie
+        </button>
+    </a>
+</mat-toolbar>
 
 
-      </div>
-  </mat-grid-tile>
-</mat-grid-list>
+
 
 
 

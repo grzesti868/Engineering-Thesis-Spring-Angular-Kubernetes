@@ -49,14 +49,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("attemptAuthentication started");
-
         ObjectMapper objectMapper = new ObjectMapper();
         String json;
         Credentials credentials;
         String username;
         String password;
+        log.debug("user-agent"+request.getHeader("user-agent"));
+        log.debug("Content-Type"+request.getHeader("Content-Type"));
+        log.debug("Access-Control-Allow-Origin"+request.getHeader("Access-Control-Allow-Origin"));
+        log.debug("Access-Control-Allow-Headers"+request.getHeader("Access-Control-Allow-Headers"));
+        log.debug("Access-Control-Allow-Methods"+request.getHeader("GET,POST,OPTIONS,DELETE,PUT"));
         try {
             json = request.getReader().lines().collect(Collectors.joining());
+            log.debug("JSON: " + json);
             credentials = objectMapper.readValue(json, Credentials.class);
 
             username=credentials.getUsername();

@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   login: Login = {
     password: null as any,
-    login: null as any
+    username: null as any
   }
 
   err: string = "";

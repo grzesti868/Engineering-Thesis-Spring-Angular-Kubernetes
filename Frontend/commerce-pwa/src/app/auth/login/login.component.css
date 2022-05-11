@@ -1,0 +1,12 @@
+.example-full-width {
+    width: 100%;
+  }
+  body {
+    background: #303030;
+  }
+  mat-grid-tile {
+
+    margin: 10px 10px 10px 10px;
+
+  }
+  

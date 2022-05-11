@@ -24,14 +24,18 @@ export class ProductsService {
     return this.http.get<Product>("http://localhost:8080/api/products/" + id, {headers: this.addHeader()});
   }
 
-  addProdcut(product: Product): Observable<Product> {
+  addProduct(product: Product): Observable<Product> {
     return this.http.post<Product>("http://localhost:8080/api/products/add", product, {headers: this.addHeader()})
     .pipe(
       tap(res => this.notification.next("Dodano nowy produkt."))
     );
   }
 
-  editProduct(id: number, product: Product): void { //todo: impl
+  editProduct(name: string, product: Product): Observable<Product> { 
+    return this.http.put<Product>("http://localhost:8080/api/products/" + name, product, {headers: this.addHeader()})
+    .pipe(
+      tap(res => this.notification.next('Zmodyfikowano produkt'))
+    );
   }
   
   track() : Observable<string> {
@@ -39,6 +43,6 @@ export class ProductsService {
   }
 
   addHeader(): HttpHeaders {
-    return new HttpHeaders().set('Authorization', 'Bearer '+this.authorization.getLoggedUser()?.token)
+    return new HttpHeaders().set('Authorization', 'Bearer '+this.authorization.getLoggedUser()?.accessToken)
   }
 }

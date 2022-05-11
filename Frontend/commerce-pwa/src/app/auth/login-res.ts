@@ -1,4 +1,5 @@
 export interface LoginRes {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
     rola: string;
 }

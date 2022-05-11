@@ -13,12 +13,28 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CartComponent } from './order/component/cart/cart.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { PanelComponent } from './panel/panel/panel.component';
+import { ProductsComponent } from './products/products/products.component';
+import { MenuDirective } from './menu/menu.directive';
+import { MenuComponent } from './menu/menu/menu.component';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { ProductComponent } from './products/product/product.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    CartComponent
+    CartComponent,
+    PanelComponent,
+    ProductsComponent,
+    MenuDirective,
+    MenuComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +46,14 @@ import { CartComponent } from './order/component/cart/cart.component';
     MatFormFieldModule,
     MatIconModule,
     MatGridListModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

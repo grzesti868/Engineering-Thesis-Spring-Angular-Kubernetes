@@ -1,10 +1,17 @@
 export interface Product {
-    //id: number;
+    id: number;
     name: string;
     imgFile: string;
     quantity: number;
-    basePricePerUnit: number;
+    basePricePerUnit: Price;
     
     //created: string; //? 
     //updated: string;
+
+   
 }
+export interface Price {
+    basePricePerUnit: string;
+}
+
+

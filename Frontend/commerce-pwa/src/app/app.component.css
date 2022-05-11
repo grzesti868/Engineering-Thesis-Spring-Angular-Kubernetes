@@ -1,0 +1,21 @@
+mat-grid-list {
+    background-color: #7b1fa2;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+.logBtn:hover {
+    background-color: #4b1363;
+  }
+
+  .title {
+    text-overflow: ellipsis;
+    text-align: center;
+    width: 10%;
+  }
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }

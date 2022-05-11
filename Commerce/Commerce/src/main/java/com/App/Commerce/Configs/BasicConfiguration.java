@@ -83,10 +83,12 @@ public class BasicConfiguration {
 
             CurrencyUnit pln = Monetary.getCurrency("PLN");
             Money moneyOf = Money.of(12, pln);
+            Money moneyOf1 = Money.of(13, pln);
+            Money moneyOf2 = Money.of(3, pln);
 
             ProductEntity product1 = new ProductEntity("produkt1",moneyOf,10, "imgFile");
-            ProductEntity product2 = new ProductEntity("produkt2",moneyOf,102, "imgFile1");
-            ProductEntity product3 = new ProductEntity("produkt3",moneyOf,103, "imgFile2");
+            ProductEntity product2 = new ProductEntity("produkt2",moneyOf1,102, "imgFile1");
+            ProductEntity product3 = new ProductEntity("produkt3",moneyOf2,103, "imgFile2");
 
             productService.addProduct(product1);
             productService.addProduct(product2);
