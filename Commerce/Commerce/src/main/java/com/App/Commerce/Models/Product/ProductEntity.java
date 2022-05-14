@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.javamoney.moneta.Money;
 
@@ -27,7 +29,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-
 @Entity
 @Table(name = "products")
 public class ProductEntity {
@@ -61,9 +62,10 @@ public class ProductEntity {
     //todo: how to impl images?
     private String imgFile;
 
-    @OneToMany(mappedBy="product", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="product", fetch = FetchType.LAZY)
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<OrderDetailsEntity> orderDetails;
 
     public ProductEntity(String name, Money basePricePerUnit, Integer quantity, String imgFile) {
@@ -71,5 +73,19 @@ public class ProductEntity {
         this.basePricePerUnit = basePricePerUnit;
         this.quantity = quantity;
         this.imgFile = imgFile;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", basePricePerUnit=" + basePricePerUnit +
+                ", quantity=" + quantity +
+                ", createdAt=" + createdAt +
+                ", updatedOn=" + updatedOn +
+                ", imgFile='" + imgFile + '\'' +
+                ", orderDetails=" + orderDetails +
+                '}';
     }
 }

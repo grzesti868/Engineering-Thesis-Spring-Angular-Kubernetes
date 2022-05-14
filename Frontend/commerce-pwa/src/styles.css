@@ -3,3 +3,17 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.warn-snack-bar-container {
+    color: #ffffff ;
+    background-color: #bf1414 ;
+}
+.added-snack-bar-container {
+    color: #ffffff ;
+    background-color: #7b1fa2;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+  }

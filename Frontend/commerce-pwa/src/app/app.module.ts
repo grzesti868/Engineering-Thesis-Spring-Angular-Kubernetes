@@ -24,6 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ProductComponent } from './products/product/product.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ProductsComponent,
     MenuDirective,
     MenuComponent,
-    ProductComponent
+    ProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
     
   ],
   providers: [],

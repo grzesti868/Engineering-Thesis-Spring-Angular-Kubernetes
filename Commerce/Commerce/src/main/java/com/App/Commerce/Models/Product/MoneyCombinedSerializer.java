@@ -49,11 +49,12 @@ public class MoneyCombinedSerializer {
         public Money deserialize(JsonParser jsonParser,
                                  DeserializationContext deserializationContext)
                 throws IOException, JacksonException {
+            System.out.println("elo");
             String[] value = jsonParser.getValueAsString().split("\\s+");
-            if(!isNumeric(value[0]))
+            System.out.println(value.length);
+            if(!isNumeric(value[0]) || value.length<=1)
                 throw new ApiRequestException("Format of basePricePerUnit wrong! should be: <val> <currency>");
-            log.info(value[0]);
-            log.info(value[1]);
+
             CurrencyUnit currency = Monetary.getCurrency(value[1]);
             return Money.of(Integer.parseInt(value[0]), currency);
         }

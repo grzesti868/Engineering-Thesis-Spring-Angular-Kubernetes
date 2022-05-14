@@ -7,9 +7,16 @@
     </a>
     <span class="example-spacer"></span>
 
+    
+        <button *ngIf="isLogged()" mat-mini-fab class="cartBtn" color="primary">
+            <mat-icon>shopping_cart</mat-icon>
+        </button>
     <a routerLink="logowanie">
-        <button mat-raised-button class="logBtn" color="primary">
-            Logowanie
+        <button mat-raised-button *ngIf="!isLogged()" class="logBtn" color="primary">
+           Zaloguj
+        </button>
+        <button *ngIf="isLogged()" mat-raised-button class="logBtn" color="primary" (click)="logout()">
+           Wyloguj
         </button>
     </a>
 </mat-toolbar>

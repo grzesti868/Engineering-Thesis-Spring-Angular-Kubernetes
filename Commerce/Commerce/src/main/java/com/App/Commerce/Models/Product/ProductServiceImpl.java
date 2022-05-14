@@ -30,27 +30,28 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Long addProduct(ProductEntity product) {
+    public ProductEntity addProduct(ProductEntity product) {
         log.debug("Adding product: {}", product.getId());
         if (productRepository.existsByName(product.getName()))
             throw new ApiRequestException("Product already exists.");
         validateProductDetails(product);
-        return productRepository.save(product).getId();
+        return productRepository.save(product);
     }
 
     @Override
     public ProductEntity update(String name, ProductEntity updateProduct) {
         log.debug("Updating product {}...", name);
+        log.debug("Updated product:"+ updateProduct.toString());
         ProductEntity productToUpdate = productRepository.findByName(name)
                 .orElseThrow(() -> new ApiNotFoundException("Product to update does not exists"));
 
         validateProductDetails(updateProduct);
 
         productToUpdate.setBasePricePerUnit(updateProduct.getBasePricePerUnit());
-        productToUpdate.setImgFile(productToUpdate.getImgFile());
-        productToUpdate.setQuantity(productToUpdate.getQuantity());
-        productToUpdate.setName(productToUpdate.getName());
-
+        productToUpdate.setImgFile(updateProduct.getImgFile());
+        productToUpdate.setQuantity(updateProduct.getQuantity());
+        productToUpdate.setName(updateProduct.getName());
+        log.debug("After update product:"+ productToUpdate);
         return productRepository.save(productToUpdate);
 
     }

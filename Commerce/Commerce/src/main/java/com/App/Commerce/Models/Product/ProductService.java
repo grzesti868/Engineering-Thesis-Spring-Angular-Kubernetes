@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductService {
 
     List<ProductEntity> getAll();
-    Long addProduct(final ProductEntity product);
+    ProductEntity addProduct(final ProductEntity product);
     ProductEntity update(final String name, final ProductEntity updateProduct);
     ProductEntity getProduct(final Long id);
     ProductEntity getProduct(final String name);

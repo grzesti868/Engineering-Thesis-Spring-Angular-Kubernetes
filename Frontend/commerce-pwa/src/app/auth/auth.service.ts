@@ -24,12 +24,12 @@ export class AuthService {
 
   getLoggedUser(): LoginRes | null {
     let loginRes = JSON.parse(sessionStorage.getItem('user') || '{}') as LoginRes;
-
-    if(this.isTokenOutdated(loginRes.accessToken)) {
-      this.refreshLogin(loginRes)
-    }
+    console.log(loginRes.accessToken);
     
-    if(loginRes!= null && this.isTokenOutdated(loginRes.accessToken)){
+    if(this.isTokenOutdated(loginRes.accessToken) && !this.isTokenOutdated(loginRes.refreshToken)) {
+      console.log("TOKEN AUTDATED, trying to refresh!")
+      this.refreshLogin(loginRes)
+    } else if(this.isTokenOutdated(loginRes.accessToken)){
       this.logout();
       loginRes = null as any;
     }
@@ -41,17 +41,14 @@ export class AuthService {
   }
   
   isTokenOutdated(token: string): boolean {
-    token.split('.').forEach( c => {
-      try{
-        console.log(atob(c));
-      }
-      catch{
-        console.log("Orginal: "+c)
-      }
-    });
-    let expirationDate = (JSON.parse(atob(token.split('.')[1]))).exp;
-    let actualDate = Math.floor((new Date).getDate() / 1000);
-    return actualDate >= expirationDate;
+    if(token!= null){
+      let expirationDate = (JSON.parse(atob(token.split('.')[1]))).exp;
+      console.log(expirationDate);
+      let actualDate = Math.round(Date.now() / 1000);
+      console.log(Math.round(Date.now() / 1000));
+      return actualDate >= expirationDate;
+    }
+    return true;
   }
   
   

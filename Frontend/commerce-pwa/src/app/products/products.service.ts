@@ -24,8 +24,8 @@ export class ProductsService {
     return this.http.get<Product>("http://localhost:8080/api/products/" + id, {headers: this.addHeader()});
   }
 
-  addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>("http://localhost:8080/api/products/add", product, {headers: this.addHeader()})
+  addProduct(product: Product){
+    return this.http.post("http://localhost:8080/api/products/add", product, {headers: this.addHeader(), responseType: "text" })
     .pipe(
       tap(res => this.notification.next("Dodano nowy produkt."))
     );
@@ -34,7 +34,14 @@ export class ProductsService {
   editProduct(name: string, product: Product): Observable<Product> { 
     return this.http.put<Product>("http://localhost:8080/api/products/" + name, product, {headers: this.addHeader()})
     .pipe(
-      tap(res => this.notification.next('Zmodyfikowano produkt'))
+      tap(res => this.notification.next('Zmodyfikowano produkt')));
+  }
+
+  deleteProduct(productId: string){
+    console.log(productId);
+    return this.http.delete("http://localhost:8080/api/products/"+ productId, {headers: this.addHeader(), responseType: "text" })
+    .pipe(
+      tap(res => this.notification.next('Usunięto produkt'))
     );
   }
   
@@ -43,6 +50,8 @@ export class ProductsService {
   }
 
   addHeader(): HttpHeaders {
-    return new HttpHeaders().set('Authorization', 'Bearer '+this.authorization.getLoggedUser()?.accessToken)
+    return new HttpHeaders()
+    .set('Authorization', 'Bearer '+this.authorization.getLoggedUser()?.accessToken)
+    .set('Accept', 'text/html, application/xhtml+xml, */*');
   }
 }

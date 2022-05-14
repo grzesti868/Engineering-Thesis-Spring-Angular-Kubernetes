@@ -15,7 +15,9 @@ mat-grid-list {
     text-align: center;
     width: 10%;
   }
-  a {
-    color: inherit;
-    text-decoration: inherit;
+  .cartBtn {
+    margin-right: 15px;
+  }
+  .cartBtn:hover {
+    background-color: #4b1363;
   }

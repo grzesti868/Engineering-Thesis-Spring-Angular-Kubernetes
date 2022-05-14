@@ -49,7 +49,7 @@ public class OrderController {
         return ResponseEntity.ok().body(orderService.getOrderById(orderId));
     }
     @DeleteMapping("{orderId}")
-    public ResponseEntity<String> deleteProductByProductName(@PathVariable("orderId") final Long orderId){
+    public ResponseEntity<String> deleteProductById(@PathVariable("orderId") final Long orderId){
         orderService.deleteOrderById(orderId);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/orders/{orderId}}").toUriString());
         return ResponseEntity.ok().body("Order "+orderId+" has been deleted.");
@@ -68,9 +68,9 @@ public class OrderController {
 
 
     @PostMapping("/{username}/new")
-    public ResponseEntity<String> createNewOrderForUser(@PathVariable final String username) {
+    public ResponseEntity<Long> createNewOrderForUser(@PathVariable final String username) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/orders/{username}/new}").toUriString());
-        return ResponseEntity.created(uri).body("New Order has been created for user: "+ orderService.newOrderForUser(username));
+        return ResponseEntity.created(uri).body(orderService.newOrderForUser(username));
     }
 
     @PutMapping("/update/{orderId}")
