@@ -1,0 +1,22 @@
+.tableClass {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10px;
+    border: 1px solid;
+    text-align: center;
+}
+button {
+    margin: 10px 10px 10px 10px;
+}
+
+th.mat-header-cell {
+    text-align: center;
+}
+.addNew {
+    width: 15em;
+    margin-left: 10%;
+    margin-top: 10px;
+    border: 1px solid;
+    text-align: center;
+    background-color: #303030;
+}

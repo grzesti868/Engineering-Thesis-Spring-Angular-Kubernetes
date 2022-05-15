@@ -1,0 +1,55 @@
+<mat-grid-list cols="1" rowHeight="5em">
+    <form *ngIf="form != null" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-grid-tile>
+            <a routerLink="/produkty">
+                <button mat-raised-button color="primary">
+                    <mat-icon>keyboard_return</mat-icon>
+                    <span>Powrót do produktów</span>
+                </button>
+            </a>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill">
+                <mat-label for="name">Nazwa</mat-label>
+                <input matInput placeholder="Podaj nazwę produktu" id="name" name="name" formControlName="name">
+                <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field appearance="fill">
+                <mat-label for="imgFile">Obraz</mat-label>
+                <input matInput placeholder="Podaj obraz produktu" id="imgFile" name="imgFile"
+                    formControlName="imgFile">
+                <mat-icon matSuffix>image</mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field appearance="fill">
+                <mat-label for="quantity">Ilość produktu</mat-label>
+                <input matInput placeholder="Podaj ilość produktu" id="quantity" name="quantity"
+                    formControlName="quantity">
+                <mat-icon matSuffix>warehouse</mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="fill">
+                <mat-label for="basePricePerUnit">Bazowa cena produktu</mat-label>
+                <input matInput placeholder="Podaj cenę produktu" id="basePricePerUnit" name="basePricePerUnit"
+                    formControlName="basePricePerUnit">
+                <mat-icon matSuffix>sell</mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <button mat-raised-button type="reset" color="primary">
+                <mat-icon>restart_alt</mat-icon>
+                <span>Reset</span>
+            </button>
+            <button mat-raised-button type="submit" color="primary" [disabled]="form.invalid">
+                <mat-icon>check</mat-icon>
+                <span>Zapisz</span>
+            </button>
+        </mat-grid-tile>
+    </form>
+</mat-grid-list>

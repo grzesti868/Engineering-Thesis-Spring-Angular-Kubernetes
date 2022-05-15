@@ -51,24 +51,29 @@ public class BasicConfiguration {
             OrderDetailsService orderDetailsService
             ) {
         return args -> {
+            log.debug("...USER CREATION...");
             AppUserEntity user1 = new AppUserEntity("greg1","pass1","email",  UserStatusEnum.Active);
             AppUserEntity user2 = new AppUserEntity("greg2","pass2","email2",  UserStatusEnum.Active);
             AppUserEntity user3 = new AppUserEntity("greg3","pass3","email23",  UserStatusEnum.Active);
-
+            log.debug("...USER COMPLETED...");
+            log.debug("...PERSONS CREATION...");
             PersonEntity person = new PersonEntity("Grzegorz","Stich", LocalDate.now(), SexEnum.Male);
-            PersonEntity person2 = new PersonEntity("Grz22egorz","S22tich", LocalDate.now(), SexEnum.Male);
-            PersonEntity person3 = new PersonEntity("Grz22asdegorz","S22tich", LocalDate.now(), SexEnum.Male);
+            PersonEntity person2 = new PersonEntity("Andrzej","Nazwisko2", LocalDate.now(), SexEnum.Male);
+            PersonEntity person3 = new PersonEntity("Maksymilian","Nazwisko3", LocalDate.now(), SexEnum.Male);
+            log.debug("...USER COMPLETED...");
 
-
+            log.debug("...ADDRESSES COMPLETED...");
             AddressEntity address = new AddressEntity("Street1","12a","2","Warszawa","12-345","Polska");
             AddressEntity address2 = new AddressEntity("Street21","12a2","22","Wa2rszawa","12-345","Polska");
             AddressEntity address3 = new AddressEntity("Strasdeet21","12a2","22","Wa2rszawa","12-345","Polska");
+            log.debug("...ADDRESSES COMPLETED...");
             person.setAddressEntity(address);
             person2.setAddressEntity(address2);
             person3.setAddressEntity(address3);
             user1.setPersonEntity(person);
             user2.setPersonEntity(person2);
             user3.setPersonEntity(person3);
+            log.debug("...ROLE CREATION...");
             appUserService.saveRole(new Role("ROLE_CUSTOMER"));
             appUserService.saveRole(new Role("ROLE_MANAGER"));
             appUserService.saveRole(new Role("ROLE_ADMIN"));

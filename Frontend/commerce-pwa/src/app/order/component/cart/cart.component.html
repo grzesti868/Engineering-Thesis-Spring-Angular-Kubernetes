@@ -1,0 +1,20 @@
+<div class="col-sm">
+    <div>Liczba produktów:  {{quantity}}</div>
+    
+    <div *ngIf="router.url === '/koszyk'"> 
+        <h2>Stan koszyka:</h2>
+        <br>
+    
+        <div  *ngFor="let k of cart" class="border border-primary">
+            
+            <p>id: {{k.id}}</p>
+            <p>produkt: {{k.fk_product}}</p>
+            <p>ilosc: {{k.product_quantity}}</p>
+            <p>cena: {{k.fk_product}}</p>
+        <!--impl jak ze strony z tabelami tutaj : https://www.positronx.io/build-progressive-web-app-pwa-with-angular/-->
+            
+        </div>
+    </div>
+    
+    <button class="btn btn-secondary btn-lg active" (click)="onDelete()" >Wyczyść koszyk</button>
+    </div>

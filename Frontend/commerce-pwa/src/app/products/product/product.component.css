@@ -1,0 +1,20 @@
+.myForm {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10%;
+    border: 1px solid;
+    text-align: center;
+}
+.mat-raised-button{
+    margin: 5px 5px 5px 5px;
+}
+.mat-raised-button:hover {
+    background-color: #4b1363;
+  }
+span {
+    margin-left: 5px;
+}
+snack-bar-container {
+    color: #ffffff !important;
+    background-color: #bf1414 !important;
+}

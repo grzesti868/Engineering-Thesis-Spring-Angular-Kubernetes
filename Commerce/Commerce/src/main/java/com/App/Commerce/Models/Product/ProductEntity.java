@@ -59,7 +59,6 @@ public class ProductEntity {
     private Date updatedOn;
 
     @Column(nullable = false, name = "image")
-    //todo: how to impl images?
     private String imgFile;
 
     @OneToMany(mappedBy="product", fetch = FetchType.LAZY)

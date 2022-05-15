@@ -1,0 +1,47 @@
+<div class="addNew">
+    <button mat-raised-button color="accent" routerLink="nowy">
+        <mat-icon>add</mat-icon>
+        Dodaj nowy produkt
+    </button> 
+</div>
+
+<div>
+    <table mat-table [dataSource]="products" multiTemplateDataRows class="tableClass">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID. </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nazwa produktu </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="imgFile">
+            <th mat-header-cell *matHeaderCellDef> Obraz </th>
+            <td mat-cell *matCellDef="let element"> {{element.imgFile}} </td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Liczba w magazynie </th>
+            <td mat-cell *matCellDef="let element" > {{element.quantity}} </td>
+        </ng-container>
+        <ng-container matColumnDef="basePricePerUnit">
+            <th mat-header-cell *matHeaderCellDef> Cena </th>
+            <td mat-cell *matCellDef="let element"> {{element.basePricePerUnit.basePricePerUnit}} </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef > Dozwolone akcje </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-raised-button color="primary" [disabled]="element.quantity<=0" (click)="addToCart(element.id)">
+                   Dodaj do koszyka
+                </button>
+                <button mat-raised-button color="primary" [disabled]="element.quantity<=0" (click)="editProduct(element.id)">
+                    Edytuj
+                </button>
+                <button mat-raised-button color="warn" (click)="deleteProduct(element.name)">
+                    Usuń
+                </button>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="col"></tr>
+        <tr mat-row *matRowDef="let row; columns: col;"></tr>
+    </table>    
+</div>
