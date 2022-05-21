@@ -14,9 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CartComponent } from './order/component/cart/cart.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { PanelComponent } from './panel/panel/panel.component';
 import { ProductsComponent } from './products/products/products.component';
-import { MenuDirective } from './menu/menu.directive';
 import { MenuComponent } from './menu/menu/menu.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
@@ -32,9 +30,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     AppComponent,
     LoginComponent,
     CartComponent,
-    PanelComponent,
     ProductsComponent,
-    MenuDirective,
     MenuComponent,
     ProductComponent,
   ],

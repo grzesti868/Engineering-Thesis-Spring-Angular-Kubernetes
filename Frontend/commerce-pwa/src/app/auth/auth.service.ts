@@ -29,7 +29,7 @@ export class AuthService {
     if(this.isTokenOutdated(loginRes.accessToken) && !this.isTokenOutdated(loginRes.refreshToken)) {
       console.log("TOKEN AUTDATED, trying to refresh!")
       this.refreshLogin(loginRes)
-    } else if(this.isTokenOutdated(loginRes.accessToken)){
+    } else if(this.isTokenOutdated(loginRes.accessToken) && this.isTokenOutdated(loginRes.refreshToken)){
       this.logout();
       loginRes = null as any;
     }
