@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+
     this.authService.login(this.login).subscribe(res => {
       if(res) {
         this.router.navigateByUrl('');
@@ -33,5 +34,7 @@ export class LoginComponent implements OnInit {
       }
     })
   }
+
+
 
 }

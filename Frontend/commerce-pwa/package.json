@@ -8,7 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start-pwa": "http-server -p 4080 -c-1 dist/angular-pwa"
-
   },
   "private": true,
   "dependencies": {
@@ -22,6 +21,9 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@angular/service-worker": "^13.3.9",
+    "cors": "^2.8.5",
+    "ngx-push-notifications": "^7.0.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
