@@ -54,7 +54,7 @@ export class ProductComponent implements OnInit {
         this.err = JSON.parse(error.error).message;
           this.snackBar.open(this.err, "Rozumiem", {
           duration: 4000,
-          panelClass: ['my-snack-bar-container']
+          panelClass: ['warn-snack-bar-container']
         });
         
       }

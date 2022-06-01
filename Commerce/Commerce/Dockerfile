@@ -1,5 +1,6 @@
 FROM sapmachine:lts
-MAINTAINER Grzegorz_Stich
-COPY target/Commerce-0.0.1-SNAPSHOT.jar Commerce-0.0.1-SNAPSHOT.jar
+LABEL author=Grzegorz_Stich
+WORKDIR /opt
+COPY target/*.jar /opt/CommerceApp.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/Commerce-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/opt/CommerceApp.jar"]
