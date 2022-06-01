@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, ɵɵqueryRefresh } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Login } from './login';
 import { LoginRes } from './login-res';
 
@@ -53,7 +54,7 @@ export class AuthService {
   
 
   login(login: Login): Observable<boolean> {
-    return this.http.post<LoginRes>("http://localhost:8080/api/login", login, {headers: this.headers })
+    return this.http.post<LoginRes>(`${environment.APIUrl}/api/login`, login, {headers: this.headers })
     .pipe(
       map(res => {
       //  console.log(JSON.stringify(res));
@@ -67,7 +68,7 @@ export class AuthService {
   }
 
   refreshLogin(loginRes: LoginRes): Observable<boolean> {
-    return this.http.get<LoginRes>("http://localhost:8080/api/users/token/refresh", { headers:
+    return this.http.get<LoginRes>(`${environment.APIUrl}/api/users/token/refresh`, { headers:
     new HttpHeaders().set('Authorization', 'Bearer ' + loginRes.refreshToken)
   })
     .pipe(

@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from './product';
 import { tap, map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -18,29 +19,29 @@ export class ProductsService {
 
   getProdcuts(): Observable<Product[]> {
     console.log("TEST");
-    return this.http.get<Product[]>("http://localhost:8080/api/products/all", {headers: this.addHeader()});
+    return this.http.get<Product[]>( `${environment.APIUrl}/api/products/all`, {headers: this.addHeader()});
   }
   
   getProduct(id: Number): Observable<Product> {
-    return this.http.get<Product>("http://localhost:8080/api/products/" + id, {headers: this.addHeader()});
+    return this.http.get<Product>(`${environment.APIUrl}/api/products/` + id, {headers: this.addHeader()});
   }
 
   addProduct(product: Product){
-    return this.http.post("http://localhost:8080/api/products/add", product, {headers: this.addHeader(), responseType: "text" })
+    return this.http.post(`${environment.APIUrl}/api/products/add`, product, {headers: this.addHeader(), responseType: "text" })
     .pipe(
       tap(res => this.notification.next("Dodano nowy produkt."))
     );
   }
 
   editProduct(name: String, product: Product): Observable<Product> { 
-    return this.http.put<Product>("http://localhost:8080/api/products/" + name, product, {headers: this.addHeader()})
+    return this.http.put<Product>(`${environment.APIUrl}/api/products/` + name, product, {headers: this.addHeader()})
     .pipe(
       tap(res => this.notification.next('Zmodyfikowano produkt')));
   }
 
   deleteProduct(productId: String){
     console.log(productId);
-    return this.http.delete("http://localhost:8080/api/products/"+ productId, {headers: this.addHeader(), responseType: "text" })
+    return this.http.delete(`${environment.APIUrl}/api/products/`+ productId, {headers: this.addHeader(), responseType: "text" })
     .pipe(
       tap(res => this.notification.next('Usunięto produkt'))
     );
