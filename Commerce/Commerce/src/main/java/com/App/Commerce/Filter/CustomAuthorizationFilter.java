@@ -46,6 +46,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
 
     @Override
+    @CrossOrigin
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("Start authenticating request");
         if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/users/token/refresh")){

@@ -1,19 +1,38 @@
 mat-grid-list {
     background-color: #7b1fa2;
+    
 }
 
 .example-spacer {
     flex: 1 1 auto;
+    
   }
+  @media (max-width: 640px) {
 
+      .title {
+        display: none;  
+      }
+      .titleMini{
+        
+        display: block !important;
+      }
+    }
 .logBtn:hover {
     background-color: #4b1363;
   }
 
   .title {
-    text-overflow: ellipsis;
+    margin-left: 22px;
+    content: "asd";
     text-align: center;
     width: 10%;
+  }
+  .titleMini {
+    margin-left: 2px;
+    content: "asd";
+    text-align: center;
+    width: 10%;
+    display: none; 
   }
   .cartBtn {
     margin-right: 15px;

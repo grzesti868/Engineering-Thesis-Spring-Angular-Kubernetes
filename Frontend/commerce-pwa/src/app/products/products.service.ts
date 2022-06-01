@@ -17,10 +17,11 @@ export class ProductsService {
   }
 
   getProdcuts(): Observable<Product[]> {
+    console.log("TEST");
     return this.http.get<Product[]>("http://localhost:8080/api/products/all", {headers: this.addHeader()});
   }
   
-  getProduct(id: number): Observable<Product> {
+  getProduct(id: Number): Observable<Product> {
     return this.http.get<Product>("http://localhost:8080/api/products/" + id, {headers: this.addHeader()});
   }
 
@@ -31,13 +32,13 @@ export class ProductsService {
     );
   }
 
-  editProduct(name: string, product: Product): Observable<Product> { 
+  editProduct(name: String, product: Product): Observable<Product> { 
     return this.http.put<Product>("http://localhost:8080/api/products/" + name, product, {headers: this.addHeader()})
     .pipe(
       tap(res => this.notification.next('Zmodyfikowano produkt')));
   }
 
-  deleteProduct(productId: string){
+  deleteProduct(productId: String){
     console.log(productId);
     return this.http.delete("http://localhost:8080/api/products/"+ productId, {headers: this.addHeader(), responseType: "text" })
     .pipe(

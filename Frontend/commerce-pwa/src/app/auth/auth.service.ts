@@ -15,16 +15,15 @@ export class AuthService {
 
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://localhost:4200',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
     
   });
 
 
   getLoggedUser(): LoginRes | null {
     let loginRes = JSON.parse(sessionStorage.getItem('user') || '{}') as LoginRes;
-    console.log(loginRes.accessToken);
     
     if(this.isTokenOutdated(loginRes.accessToken) && !this.isTokenOutdated(loginRes.refreshToken)) {
       console.log("TOKEN AUTDATED, trying to refresh!")
@@ -43,7 +42,7 @@ export class AuthService {
   isTokenOutdated(token: string): boolean {
     if(token!= null){
       let expirationDate = (JSON.parse(atob(token.split('.')[1]))).exp;
-      console.log(expirationDate);
+    //  console.log(expirationDate);
       let actualDate = Math.round(Date.now() / 1000);
       console.log(Math.round(Date.now() / 1000));
       return actualDate >= expirationDate;
@@ -57,7 +56,7 @@ export class AuthService {
     return this.http.post<LoginRes>("http://localhost:8080/api/login", login, {headers: this.headers })
     .pipe(
       map(res => {
-        console.log(JSON.stringify(res));
+      //  console.log(JSON.stringify(res));
         sessionStorage.setItem('user', JSON.stringify(res));
         this.changeUserStatus.emit();
         return true;
@@ -73,7 +72,7 @@ export class AuthService {
   })
     .pipe(
       map(res => { 
-        console.log(JSON.stringify(res));
+      //  console.log(JSON.stringify(res));
         sessionStorage.setItem('user', JSON.stringify(res));
         this.changeUserStatus.emit();
         return true;

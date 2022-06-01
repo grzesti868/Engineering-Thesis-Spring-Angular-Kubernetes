@@ -4,7 +4,34 @@
     margin-top: 10px;
     border: 1px solid;
     text-align: center;
+
 }
+
+@media (max-width: 640px) {
+
+   .tableClass {
+    table-layout:fixed;
+    width:100%;
+    margin-left: 0%;
+   }
+   .btnLarge  {
+       display: none ;
+   }
+   .btnSmall  {
+    display: block !important;
+    }
+    .addNew {
+        margin-left: 0% !important;
+    }
+  }
+.btnSmall {
+    display: none;
+}
+.btnLarge button {
+    width: 50%;
+
+}
+
 button {
     margin: 10px 10px 10px 10px;
 }
