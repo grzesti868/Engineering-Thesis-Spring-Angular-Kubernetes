@@ -28,6 +28,11 @@ spec:
                 configMapKeyRef:
                   name: postgres-conf
                   key: name
+            - name: POSTGRES_INIT  # Setting Database name from configMap
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgres-conf
+                    key: init_mode
             - name: POSTGRES_USER  # Setting Database username from Secret
               valueFrom:
                 secretKeyRef:

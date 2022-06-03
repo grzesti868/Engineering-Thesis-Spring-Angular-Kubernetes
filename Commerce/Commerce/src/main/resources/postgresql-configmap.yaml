@@ -5,3 +5,4 @@ metadata:
 data:
   host: database
   name: commerceDB
+  init_mode: update
