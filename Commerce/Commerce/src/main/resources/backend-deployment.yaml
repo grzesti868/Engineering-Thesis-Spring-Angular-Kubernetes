@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: gregvader98/backend-server:1.0.6
+          image: gregvader98/backend-server:2.0.0
           ports:
             - containerPort: 8080
           env:   # Setting Enviornmental Variables
@@ -28,16 +28,16 @@ spec:
                 configMapKeyRef:
                   name: postgres-conf
                   key: name
-            - name: POSTGRES_INIT  # Setting Database name from configMap
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgres-conf
-                    key: init_mode
+            - name: POSTGRES_INIT  # Setting Database init mode from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-conf
+                  key: init_mode
             - name: POSTGRES_USER  # Setting Database username from Secret
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials # Secret Name
-                  key: postgres_user
+                  key: postgres_username
             - name: POSTGRES_PASSWORD # Setting Database password from Secret
               valueFrom:
                 secretKeyRef:
