@@ -54,7 +54,7 @@ export class AuthService {
   
 
   login(login: Login): Observable<boolean> {
-    return this.http.post<LoginRes>(`${environment.APIUrl}/api/login`, login, {headers: this.headers })
+    return this.http.post<LoginRes>(`${environment.apiUrl}/api/login`, login, {headers: this.headers })
     .pipe(
       map(res => {
       //  console.log(JSON.stringify(res));
@@ -68,7 +68,7 @@ export class AuthService {
   }
 
   refreshLogin(loginRes: LoginRes): Observable<boolean> {
-    return this.http.get<LoginRes>(`${environment.APIUrl}/api/users/token/refresh`, { headers:
+    return this.http.get<LoginRes>(`${environment.apiUrl}/api/users/token/refresh`, { headers:
     new HttpHeaders().set('Authorization', 'Bearer ' + loginRes.refreshToken)
   })
     .pipe(
