@@ -41,12 +41,12 @@
                     </button>
                 </div>
                 <div class="btnLarge">
-                    <button mat-raised-button color="primary" [disabled]="element.quantity<=0" (click)="editProduct(element.id)">
+                    <button mat-raised-button color="primary" (click)="editProduct(element.id)">
                         Edytuj
                     </button>
                 </div>
                 <div class="btnSmall">
-                    <button mat-mini-fab color="primary" [disabled]="element.quantity<=0" (click)="editProduct(element.id)">
+                    <button mat-mini-fab color="primary" (click)="editProduct(element.id)">
                         <mat-icon>edit</mat-icon>
                     </button>
                 </div>
