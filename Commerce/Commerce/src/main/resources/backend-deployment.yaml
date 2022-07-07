@@ -14,31 +14,39 @@ spec:
     spec:
       containers:
         - name: backend
-          image: gregvader98/backend-server:2.0.0
+          image: gregvader98/backend-server:3.0.0
+          imagePullPolicy: "Always"
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "250Mi"
+              cpu: "250m"
           ports:
             - containerPort: 8080
-          env:   # Setting Enviornmental Variables
-            - name: DB_HOST   # Setting Database host address from configMap
+          env:
+            - name: DB_HOST
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-conf  # name of configMap
+                  name: postgres-conf
                   key: host
-            - name: DB_NAME  # Setting Database name from configMap
+            - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
                   name: postgres-conf
                   key: name
-            - name: POSTGRES_INIT  # Setting Database init mode from configMap
+            - name: POSTGRES_INIT
               valueFrom:
                 configMapKeyRef:
                   name: postgres-conf
                   key: init_mode
-            - name: POSTGRES_USER  # Setting Database username from Secret
+            - name: POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres-credentials # Secret Name
+                  name: postgres-credentials
                   key: postgres_username
-            - name: POSTGRES_PASSWORD # Setting Database password from Secret
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-credentials

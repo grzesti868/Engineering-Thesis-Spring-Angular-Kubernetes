@@ -1,15 +1,14 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: backend
+  name: backend-sv
   labels:
-    name: backend
+    name: backend-sv
 spec:
   ports:
-    - nodePort: 30163
-      port: 8080
+    - port: 8080
       targetPort: 8080
       protocol: TCP
   selector:
     app: backend
-  type: NodePort
+  type: ClusterIP

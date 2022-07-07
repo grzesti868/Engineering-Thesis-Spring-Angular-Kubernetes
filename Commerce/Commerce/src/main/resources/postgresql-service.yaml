@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: database-sv
   labels:
     app: postgres
     tier: database
@@ -11,4 +11,3 @@ spec:
   selector:
     app: postgres
     tier: database
-  clusterIP: None
