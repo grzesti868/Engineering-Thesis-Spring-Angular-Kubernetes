@@ -22,10 +22,10 @@ pipeline {
                 }
                 failure {
                     emailext subject: 'Job \'${JOB_NAME}\' (${BUILD_NUMBER}) is waiting for input',
-                        body: '''
+                        body: """
                             Build: ${BUILD_NUMBER}, status:${currentBuild.result}.\n
                             Please go to ${BUILD_URL} and verify the build.
-                        ''',
+                        """,
                         attachLog: true,
                         compressLog: true,
                         to: 'test@jenkins.local'
