@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    triggers {
+        pollSCM '30 20 * * 6'
+        }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/grzesti868/Engineering-Thesis-Spring-Angular-Kubernetes.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'mvn -f Commerce/Commerce/pom.xml clean package'
+            }
+
+          post {
+                always {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    //archiveArtifacts 'target/*.jar'
+                }
+                failure {
+                    emailext subject: 'Job \'${JOB_NAME}\' (${BUILD_NUMBER}) is waiting for input',
+                        body: '''
+                            Build: ${BUILD_NUMBER}, status:${currentBuild.result}.\n
+                            Please go to ${BUILD_URL} and verify the build.
+                        ''',
+                        attachLog: true,
+                        compressLog: true,
+                        to: 'test@jenkins.local'
+                }
+            }
+        }
+    }
+}
